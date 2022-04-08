@@ -1,11 +1,11 @@
-# Pixelbin JS SDK
+# Pixelbin Core SDK
 
-Pixelbin JS SDK helps you integrate Pixelbin with your Frontend JS Application.
+Pixelbin Core SDK helps you integrate Pixelbin with your Frontend JS Application.
 
 ## Installation
 
 ```
-npm install  @pixelbin/js --save
+npm install  @pixelbin/core --save
 ```
 
 ## Usage
@@ -14,7 +14,7 @@ npm install  @pixelbin/js --save
 
 ```javascript
 // Import the Pixelbin class
-import Pixelbin from "@pixelbin/js";
+import Pixelbin from "@pixelbin/core";
 
 // Create your instance
 const pixelbin = new Pixelbin({
@@ -29,8 +29,8 @@ const pixelbin = new Pixelbin({
 
 ```javascript
 // Import transformations
-import EraseBg from "@pixelbin/js/transformations/EraseBg";
-import Basic from "@pixelbin/js/transformations/Basic";
+import EraseBg from "@pixelbin/core/transformations/EraseBg";
+import Basic from "@pixelbin/core/transformations/Basic";
 
 // Create a new instance. If you have't (see above for the details)
 const pixelbin = new Pixelbin({
@@ -110,7 +110,7 @@ Example :
 <input type="file" id="fileInput" />
 ```
 
-2. Generate the presignedUrl with the backend sdk. [click here](#add-link).
+2. Generate the presignedUrl with the backend sdk. [click here](https://github.com/pixelbin-dev/pixelbin-js-admin/blob/main/documentation/platform/ASSETS.md#createsignedurl).
 
 3. Use the response object as is with the upload api as shown below.
 
@@ -241,7 +241,7 @@ A transformation is an operation or a list of operations that can be performed o
 
 ```javascript
 // import a resize transformation
-import { resize } from "@pixelbin/js/transformations/Basic";
+import { resize } from "@pixelbin/core/transformations/Basic";
 
 // create the resize transformation
 const t = resize({ height: 100, width: 100 });
@@ -251,7 +251,7 @@ Multiple transformations can be chained by using `and` on the created transforma
 
 ```javascript
 // import a resize transformation
-import { resize, flip } from "@pixelbin/js/transformations/Basic";
+import { resize, flip } from "@pixelbin/core/transformations/Basic";
 
 // create the basic transformations
 const t1 = resize({ height: 100, width: 100 });
