@@ -110,7 +110,7 @@ Example :
 <input type="file" id="fileInput" />
 ```
 
-2. Generate the presignedUrl with the backend sdk. [click here](#add-link).
+2. Generate the presignedUrl with the backend sdk. [click here](https://github.com/pixelbin-dev/pixelbin-js-admin/blob/main/documentation/platform/ASSETS.md#createsignedurl).
 
 3. Use the response object as is with the upload api as shown below.
 
