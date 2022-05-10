@@ -1,4 +1,4 @@
-import { PDKIllegalArgumentError } from "../errors/PixelbinErrors";
+import { PDKIllegalArgumentError, PDKInvalidUrlError } from "../errors/PixelbinErrors";
 import { objToUrl, urlToObj } from "../utils";
 
 describe("UrlUtils tests", () => {
@@ -61,6 +61,13 @@ describe("UrlUtils tests", () => {
         expect(obj.baseUrl).toBe("https://cdn.pixelbin.io");
         expect(obj.pattern).toBeUndefined();
         expect(obj.filePath).toBe("__playground/playground-default.jpeg");
+    });
+    it("should get obj from url - Invalid URL", async () => {
+        expect(() =>
+            urlToObj(
+                "https://cdn.pixelbin.io/v2/asd/dccdc01/original/__playground/playground-default.jpeg",
+            ),
+        ).toThrow(PDKInvalidUrlError);
     });
     it("should get obj from url - 2", async () => {
         const obj = urlToObj(

@@ -1,4 +1,5 @@
-import { getUrlParts, version2Regex } from "./common.utils";
+import { getUrlParts } from "./common.utils";
+import { version2Regex, zoneSlug } from "./regex";
 import { PDKInvalidUrlError, PDKIllegalArgumentError } from "../errors/PixelbinErrors";
 
 export const getUrlFromObj = function (obj, config) {
@@ -7,7 +8,7 @@ export const getUrlFromObj = function (obj, config) {
     if (!obj.filePath) throw new PDKIllegalArgumentError("key filePath should be defined");
     obj["pattern"] = getPatternFromTransformations(obj["transformations"], config) || "original";
     if (!obj.version || !version2Regex.test(obj.version)) obj.version = "v2";
-    if (!obj.zone || !/([a-zA-Z0-9_-]{6})/.test(obj.zone)) obj.zone = "";
+    if (!obj.zone || !zoneSlug.test(obj.zone)) obj.zone = "";
     const urlKeySorted = ["baseUrl", "version", "cloudName", "zoneSlug", "pattern", "filePath"];
     const urlArr = [];
     urlKeySorted.forEach((key) => {
@@ -103,7 +104,11 @@ const getTransformationsFromPattern = function (pattern, url, config, flatten = 
 
 export const getObjFromUrl = function (url, config, flatten) {
     const parts = getPartsFromUrl(url);
-    parts.transformations = getTransformationsFromPattern(parts.pattern, url, config, flatten);
+    try {
+        parts.transformations = getTransformationsFromPattern(parts.pattern, url, config, flatten);
+    } catch (err) {
+        throw new PDKInvalidUrlError("Error Processing url. Please check the url is correct");
+    }
     delete parts["pattern"];
     return parts;
 };
