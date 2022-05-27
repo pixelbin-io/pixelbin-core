@@ -62,7 +62,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag along with axios
 
 ```html
-<script src="pixelbin.v1.0.2.js"></script>
+<script src="pixelbin.v1.0.3.js"></script>
 ```
 
 ```javascript

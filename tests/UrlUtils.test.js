@@ -125,6 +125,24 @@ describe("UrlUtils tests", () => {
             "alien_fig_tree_planet_x_wallingford_seattle_washington_usa_517559.jpeg",
         );
     });
+    it("should get obj from url with zone", async () => {
+        const presetUrl =
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/t.compress()~t.resize()~t.extend()~p.apply(n:presetNameXyx)/alien_fig_tree_planet_x_wallingford_seattle_washington_usa_517559.jpeg";
+        const obj = urlToObj(presetUrl);
+        expect(obj.transformations).toEqual([
+            { name: "compress", plugin: "t" },
+            { name: "resize", plugin: "t" },
+            { name: "extend", plugin: "t" },
+            { plugin: "p", name: "presetNameXyx" },
+        ]);
+        expect(obj.cloudName).toBe("red-scene-95b6ea");
+        expect(obj.zone).toBe("z-slug");
+        expect(obj.baseUrl).toBe("https://cdn.pixelbin.io");
+        expect(obj.pattern).toBeUndefined();
+        expect(obj.filePath).toBe(
+            "alien_fig_tree_planet_x_wallingford_seattle_washington_usa_517559.jpeg",
+        );
+    });
     it("should generate url from obj", async () => {
         const transformations = [
             {
@@ -168,12 +186,12 @@ describe("UrlUtils tests", () => {
         };
         let url = objToUrl(obj);
         expect(url).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         url = objToUrl(obj);
         expect(url).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1/__playground/playground-default.jpeg",
         );
     });
     it("should generate url from obj when empty", async () => {
@@ -189,12 +207,12 @@ describe("UrlUtils tests", () => {
         let url = objToUrl(obj);
         // expect(urlUtils.generatePixelbinPattern(transformation)).toBe("t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1");
         expect(url).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         url = objToUrl(obj);
         expect(url).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
     });
     it("should generate url from obj undefined", async () => {
@@ -208,12 +226,12 @@ describe("UrlUtils tests", () => {
         let url = objToUrl(obj);
         // expect(urlUtils.generatePixelbinPattern(transformation)).toBe("t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1");
         expect(url).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         url = objToUrl(obj);
         expect(url).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
     });
     it("should generate url from obj  empty object", async () => {
@@ -228,12 +246,12 @@ describe("UrlUtils tests", () => {
         let url = objToUrl(obj);
         // expect(urlUtils.generatePixelbinPattern(transformation)).toBe("t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1");
         expect(url).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         url = objToUrl(obj);
         expect(url).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
     });
     it("should throw error to generate url from obj if filePath not defined", async () => {

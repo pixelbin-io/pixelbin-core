@@ -9,7 +9,7 @@ export const getUrlFromObj = function (obj, config) {
     obj["pattern"] = getPatternFromTransformations(obj["transformations"], config) || "original";
     if (!obj.version || !version2Regex.test(obj.version)) obj.version = "v2";
     if (!obj.zone || !zoneSlug.test(obj.zone)) obj.zone = "";
-    const urlKeySorted = ["baseUrl", "version", "cloudName", "zoneSlug", "pattern", "filePath"];
+    const urlKeySorted = ["baseUrl", "version", "cloudName", "zone", "pattern", "filePath"];
     const urlArr = [];
     urlKeySorted.forEach((key) => {
         if (obj[key]) urlArr.push(obj[key]);
