@@ -1,6 +1,6 @@
 {
     "name": "@pixelbin/core",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Pixelbin Core SDK helps you integrate Pixelbin with your Frontend JS Application.",
     "scripts": {
         "test": "jest"
