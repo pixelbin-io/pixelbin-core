@@ -1,6 +1,6 @@
 {
     "name": "@pixelbin/core",
-    "version": "1.0.3",
+    "version": "2.0.0",
     "description": "Pixelbin Core SDK helps you integrate Pixelbin with your Frontend JS Application.",
     "scripts": {
         "test": "jest"
@@ -9,10 +9,8 @@
         "type": "git",
         "url": "git+https://github.com/pixelbin-dev/pixelbin-core.git"
     },
-    "peerDependencies": {
-        "axios": "*"
-    },
     "dependencies": {
+        "axios": "^0.27.2",
         "core-js": "3.21.1",
         "regenerator-runtime": "0.13.9"
     },
@@ -26,7 +24,13 @@
         "regenerator-runtime": "0.13.9",
         "jest": "27.5.1"
     },
-    "main": "pixelbin.js",
     "author": "Pixelbin",
+    "main": "./lib/cjs/pixelbin.js",
+    "module": "./lib/esm/pixelbin.js",
+    "files": [
+        "dist",
+        "lib",
+        "README.md"
+    ],
     "license": "MIT"
 }

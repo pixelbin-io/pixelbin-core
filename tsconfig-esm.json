@@ -1,0 +1,24 @@
+{
+    "exclude": [
+        "./tests",
+        "./.babelrc.js",
+        "./jest.config.js",
+        "./dist",
+        "./webpack.config.js",
+        "./lib"
+    ],
+    "compilerOptions": {
+        "target": "es6",
+        "module": "ES2020",
+        "allowJs": true,
+        "noEmit": false,
+        "declaration": true,
+        "rootDir": "./",
+        "outDir": "./lib/esm",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true
+    }
+}
