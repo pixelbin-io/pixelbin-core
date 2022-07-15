@@ -29,8 +29,10 @@ const pixelbin = new Pixelbin({
 
 ```javascript
 // Import transformations
-import EraseBg from "@pixelbin/core/transformations/EraseBg";
-import Basic from "@pixelbin/core/transformations/Basic";
+import Pixelbin, { transformations } from "@pixelbin/core";
+
+const EraseBg = transformations.EraseBg;
+const Basic = transformations.Basic;
 
 // Create a new instance. If you have't (see above for the details)
 const pixelbin = new Pixelbin({
@@ -62,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag along with axios
 
 ```html
-<script src="pixelbin.v1.0.3.js"></script>
+<script src="pixelbin.v2.0.0.js"></script>
 ```
 
 ```javascript
@@ -241,7 +243,9 @@ A transformation is an operation or a list of operations that can be performed o
 
 ```javascript
 // import a resize transformation
-import { resize } from "@pixelbin/core/transformations/Basic";
+import Pixelbin, { transformations } from "@pixelbin/core";
+
+const { resize } = transformations.Basic;
 
 // create the resize transformation
 const t = resize({ height: 100, width: 100 });
@@ -251,7 +255,9 @@ Multiple transformations can be chained by using `and` on the created transforma
 
 ```javascript
 // import a resize transformation
-import { resize, flip } from "@pixelbin/core/transformations/Basic";
+import Pixelbin, { transformations } from "@pixelbin/core";
+
+const { resize, flip } = transformations.Basic;
 
 // create the basic transformations
 const t1 = resize({ height: 100, width: 100 });

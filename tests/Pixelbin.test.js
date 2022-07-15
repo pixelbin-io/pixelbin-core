@@ -1,8 +1,8 @@
-import Pixelbin from "../pixelbin.js";
+import Pixelbin, { transformations } from "../pixelbin.js";
 import { Transformation } from "../pixelbin.js";
-import { extend, resize, flip } from "../transformations/Basic";
 import { bg } from "../transformations/EraseBG";
 import { upscale } from "../transformations/SuperResolution";
+const { extend, resize, flip } = transformations.Basic;
 
 describe("SDK tests", () => {
     it("should run", async () => {
