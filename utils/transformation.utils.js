@@ -1,6 +1,6 @@
 import { getUrlParts } from "./common.utils";
 import { version2Regex, zoneSlug } from "./regex";
-import { PDKInvalidUrlError, PDKIllegalArgumentError } from "../errors/PixelbinErrors";
+import { PDKInvalidUrlError, PDKIllegalArgumentError, PDKIllegalQueryParameterError } from "../errors/PixelbinErrors";
 
 export const getUrlFromObj = function (obj, config) {
     if (!obj.baseUrl) obj["baseUrl"] = "https://cdn.pixelbin.io";
@@ -14,11 +14,26 @@ export const getUrlFromObj = function (obj, config) {
     urlKeySorted.forEach((key) => {
         if (obj[key]) urlArr.push(obj[key]);
     });
-    return urlArr.join("/");
+    let queryArr = [];
+    if (obj.options) {
+        const { dpr, f_auto } = obj.options;
+        if (dpr) {
+            validateDPR(dpr);
+            queryArr.push(`dpr=${dpr}`);
+        }
+        if (f_auto) {
+            validateFAuto(f_auto);
+            queryArr.push(`f_auto=${f_auto}`);
+        }
+    }
+    let urlStr = urlArr.join("/");
+    if (queryArr.length) urlStr += "?" + queryArr.join("&");
+    return urlStr;
 };
 
 const getPartsFromUrl = function (url) {
     const parts = getUrlParts(url);
+    const queryObj = processQueryParams(parts);
     return {
         baseUrl: `${parts["protocol"]}//${parts["host"]}`,
         filePath: parts["filePath"],
@@ -26,6 +41,7 @@ const getPartsFromUrl = function (url) {
         version: parts["version"],
         zone: parts["zoneSlug"],
         cloudName: parts["cloudName"],
+        options: { ...queryObj },
     };
 };
 
@@ -179,4 +195,37 @@ export const rgbHex = function (red, green, blue, alpha) {
     }
 
     return (blue | (green << 8) | (red << 16) | (1 << 24)).toString(16).slice(1) + alpha; // eslint-disable-line no-bitwise
+};
+
+const validateDPR = (dpr) => {
+    if (isNaN(dpr) || dpr < 0.1 || dpr > 5.0)
+        throw new PDKIllegalQueryParameterError(
+            "DPR value should be numeric and should be between 0.1 to 5.0"
+        );
+};
+
+const validateFAuto = (f_auto) => {
+    if (typeof f_auto !== "boolean")
+        throw new PDKIllegalQueryParameterError(
+            "F_auto value should be boolean"
+        );
+};
+
+const processQueryParams = (urlParts) => {
+    const queryParams = urlParts.search.substring(1).split("&");
+    let queryObj = {};
+    for (const params of queryParams) {
+        const queryElements = params.split("=");
+        if (queryElements[0] === "dpr") {
+            const dpr = +queryElements[1];
+            validateDPR(dpr);
+            queryObj[queryElements[0]] = dpr;
+        }
+        if (queryElements[0] === "f_auto") {
+            const f_auto = queryElements[1].toLowerCase() === "true";
+            validateFAuto(f_auto);
+            queryObj[queryElements[0]] = f_auto;
+        }
+    }
+    return queryObj;
 };
