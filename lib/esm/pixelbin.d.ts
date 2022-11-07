@@ -57,9 +57,14 @@ declare class Pixelbin {
             baseUrl: string;
             filePath: any;
             pattern: any;
-            version: string;
+            version: string; /**
+             * provides image on which transformation can be done.
+             * @param {String} imageUri path of image.
+             * returns Image
+             */
             zone: any;
             cloudName: any;
+            options: {};
         };
     };
     /**

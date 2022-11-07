@@ -6,6 +6,7 @@ export function getObjFromUrl(url: any, config: any, flatten: any): {
     version: string;
     zone: any;
     cloudName: any;
+    options: {};
 };
 export function getPatternFromTransformations(transformationList: any, config: any): any;
 export function getUnArchivedPresets(presets: any): any;

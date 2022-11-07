@@ -12,4 +12,11 @@ class PDKIllegalArgumentError extends Error {
     }
 }
 
-export { PDKInvalidUrlError, PDKIllegalArgumentError };
+class PDKIllegalQueryParameterError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "PDKIllegalQueryParameterError";
+    }
+}
+
+export { PDKInvalidUrlError, PDKIllegalArgumentError, PDKIllegalQueryParameterError };
