@@ -4,3 +4,6 @@ export class PDKInvalidUrlError extends Error {
 export class PDKIllegalArgumentError extends Error {
     constructor(message: any);
 }
+export class PDKIllegalQueryParameterError extends Error {
+    constructor(message: any);
+}

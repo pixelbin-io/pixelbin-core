@@ -1,6 +1,10 @@
 import { getUrlParts } from "./common.utils";
 import { version2Regex, zoneSlug } from "./regex";
-import { PDKInvalidUrlError, PDKIllegalArgumentError, PDKIllegalQueryParameterError } from "../errors/PixelbinErrors";
+import {
+    PDKInvalidUrlError,
+    PDKIllegalArgumentError,
+    PDKIllegalQueryParameterError,
+} from "../errors/PixelbinErrors";
 
 export const getUrlFromObj = function (obj, config) {
     if (!obj.baseUrl) obj["baseUrl"] = "https://cdn.pixelbin.io";
@@ -34,6 +38,7 @@ export const getUrlFromObj = function (obj, config) {
 const getPartsFromUrl = function (url) {
     const parts = getUrlParts(url);
     const queryObj = processQueryParams(parts);
+
     return {
         baseUrl: `${parts["protocol"]}//${parts["host"]}`,
         filePath: parts["filePath"],
@@ -200,15 +205,13 @@ export const rgbHex = function (red, green, blue, alpha) {
 const validateDPR = (dpr) => {
     if (isNaN(dpr) || dpr < 0.1 || dpr > 5.0)
         throw new PDKIllegalQueryParameterError(
-            "DPR value should be numeric and should be between 0.1 to 5.0"
+            "DPR value should be numeric and should be between 0.1 to 5.0",
         );
 };
 
 const validateFAuto = (f_auto) => {
     if (typeof f_auto !== "boolean")
-        throw new PDKIllegalQueryParameterError(
-            "F_auto value should be boolean"
-        );
+        throw new PDKIllegalQueryParameterError("F_auto value should be boolean");
 };
 
 const processQueryParams = (urlParts) => {
