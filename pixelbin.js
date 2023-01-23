@@ -1,5 +1,3 @@
-import "core-js/stable";
-import "regenerator-runtime/runtime";
 import Image from "./image.js";
 import Transformation from "./transformation";
 import * as errors from "./errors/PixelbinErrors";
