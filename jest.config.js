@@ -7,7 +7,7 @@ module.exports = async () => {
     return {
         testEnvironment: "jsdom",
         moduleNameMapper: {
-            "axios": "axios/dist/node/axios.cjs"
-        }
+            axios: "axios/dist/node/axios.cjs",
+        },
     };
 };

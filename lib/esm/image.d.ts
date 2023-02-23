@@ -14,6 +14,7 @@ declare class Image {
     zone: string;
     transformation: any[];
     host: string;
+    version: string;
     /**
      * Set transformation to be performed on Image.
      * @param {Transformation} transformation Image transformation

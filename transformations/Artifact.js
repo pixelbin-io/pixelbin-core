@@ -1,4 +1,6 @@
 import Transformation from "../transformation.js";
+import { processParams } from "../utils/transformation.utils.js";
+
 /**
 * Artifact Removal Plugin
 
@@ -9,13 +11,15 @@ export const remove = function (config = {}) {
     const params = [].filter((param) => config.hasOwnProperty(param));
     const transformation = ["af.remove", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1)
-            transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
+
 export default {
     remove,
 };
