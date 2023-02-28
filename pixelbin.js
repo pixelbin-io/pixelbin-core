@@ -8,21 +8,31 @@ import * as Basic from "./transformations/Basic";
 import * as RemoveBG from "./transformations/RemoveBG";
 import * as EraseBG from "./transformations/EraseBG";
 import * as SuperResolution from "./transformations/SuperResolution";
-import * as ArtifactRemoval from "./transformations/ArtifactRemoval";
+import * as Artifact from "./transformations/Artifact";
 import * as WatermarkRemoval from "./transformations/WatermarkRemoval";
-import * as AWSRekognition from "./transformations/AWSRekognition";
-import * as GoogleVision from "./transformations/GoogleVision";
+import * as AWSRekognitionPlugin from "./transformations/AWSRekognitionPlugin";
+import * as GoogleVisionPlugin from "./transformations/GoogleVisionPlugin";
+import * as WatermarkDetection from "./transformations/WatermarkDetection";
+import * as IntelligentCrop from "./transformations/IntelligentCrop";
+import * as TextDetectionandRecognition from "./transformations/TextDetectionandRecognition";
+import * as NumberPlateDetection from "./transformations/NumberPlateDetection";
+import * as ImageCentering from "./transformations/ImageCentering";
 
 /**
  * @typedef {Object} transformations
  * @property {Basic} Basic - Basic Transformations
  * @property {RemoveBG} RemoveBG - Remove background from any image
- * @property {EraseBG} EraseBG - Remove background from any image
- * @property {SuperResolution} SuperResolution - Upscale image resolution
- * @property {ArtifactRemoval} ArtifactRemoval - Remove JPEG compression artifact noise and get cleaner images
- * @property {WatermarkRemoval} WatermarkRemoval - Produce watermark free images
- * @property {AWSRekognition} AWSRekognition - Detect objects in images.
- * @property {GoogleVision} GoogleVision - Detect objects in images.
+ * @property {EraseBG} EraseBG - EraseBG Background Removal Module
+ * @property {SuperResolution} SuperResolution - Super Resolution Module
+ * @property {Artifact} Artifact - Artifact Removal Plugin
+ * @property {WatermarkRemoval} WatermarkRemoval - Watermark Removal Plugin
+ * @property {AWSRekognitionPlugin} AWSRekognitionPlugin - Detect objects and text in images
+ * @property {GoogleVisionPlugin} GoogleVisionPlugin - Detect content and text in images
+ * @property {WatermarkDetection} WatermarkDetection - Watermark Detection Plugin
+ * @property {IntelligentCrop} IntelligentCrop - Intelligent Crop Plugin
+ * @property {TextDetectionandRecognition} TextDetectionandRecognition - OCR Module
+ * @property {NumberPlateDetection} NumberPlateDetection - Number Plate Detection Plugin
+ * @property {ImageCentering} ImageCentering - Image Centering Module
  */
 
 /**
@@ -73,10 +83,15 @@ class Pixelbin {
         RemoveBG,
         EraseBG,
         SuperResolution,
-        ArtifactRemoval,
+        Artifact,
         WatermarkRemoval,
-        AWSRekognition,
-        GoogleVision,
+        AWSRekognitionPlugin,
+        GoogleVisionPlugin,
+        WatermarkDetection,
+        IntelligentCrop,
+        TextDetectionandRecognition,
+        NumberPlateDetection,
+        ImageCentering,
     };
 
     static Transformation = Transformation;

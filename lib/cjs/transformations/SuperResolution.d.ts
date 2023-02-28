@@ -1,5 +1,6 @@
 export function upscale(config?: {
     type: string;
+    enhanceFace: boolean;
 }): Transformation;
 declare namespace _default {
     export { upscale };

@@ -5,6 +5,7 @@ export function resize(config?: {
     background: string;
     position: string;
     algorithm: string;
+    dpr: number;
 }): Transformation;
 export function compress(config?: {
     quality: number;
@@ -15,6 +16,8 @@ export function extend(config?: {
     bottom: number;
     right: number;
     background: string;
+    borderType: string;
+    dpr: number;
 }): Transformation;
 export function extract(config?: {
     top: number;
@@ -33,14 +36,13 @@ export function flip(config?: {}): Transformation;
 export function flop(config?: {}): Transformation;
 export function sharpen(config?: {
     sigma: number;
-    flat: number;
-    jagged: number;
 }): Transformation;
 export function median(config?: {
     size: number;
 }): Transformation;
 export function blur(config?: {
     sigma: number;
+    dpr: number;
 }): Transformation;
 export function flatten(config?: {
     background: string;
@@ -63,9 +65,13 @@ export function tint(config?: {
 export function toFormat(config?: {
     format: string;
 }): Transformation;
+export function density(config?: {
+    density: number;
+}): Transformation;
 export function merge(config?: {
     mode: string;
     image: string;
+    transformation: string;
     background: string;
     height: number;
     width: number;
@@ -74,6 +80,8 @@ export function merge(config?: {
     gravity: string;
     blend: string;
     tile: boolean;
+    listOfBboxes: any;
+    listOfPolygons: any;
 }): Transformation;
 declare namespace _default {
     export { resize };
@@ -95,6 +103,7 @@ declare namespace _default {
     export { grey };
     export { tint };
     export { toFormat };
+    export { density };
     export { merge };
 }
 export default _default;

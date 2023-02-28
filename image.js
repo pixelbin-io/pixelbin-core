@@ -13,6 +13,7 @@ class Image {
         this.zone = _zone;
         this.transformation = [];
         this.host = "https://cdn.pixelbin.io";
+        this.version = "v2";
     }
 
     /**
@@ -33,9 +34,9 @@ class Image {
     getUrl() {
         let operations = this.transformation.join("~").replace(/ /g, "") || "original";
 
-        return `${this.host}/${this.cloudName}/${this.zone ? `${this.zone}/` : ""}${operations}/${
-            this.imageUri
-        }`;
+        return `${this.host}/${this.version}/${this.cloudName}/${
+            this.zone ? `${this.zone}/` : ""
+        }${operations}/${this.imageUri}`;
     }
 }
 

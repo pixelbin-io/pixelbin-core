@@ -64,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag along with axios
 
 ```html
-<script src="pixelbin.v3.0.0.js"></script>
+<script src="pixelbin.v4.0.0.js"></script>
 ```
 
 ```javascript
@@ -305,6 +305,7 @@ For a working example, refer [here](#transform-and-optimize-images)
 | background | color                                                                                                             | `000000`   |
 | position   | enum : `top` , `bottom` , `left` , `right` , `right_top` , `right_bottom` , `left_top` , `left_bottom` , `center` | `center`   |
 | algorithm  | enum : `nearest` , `cubic` , `mitchell` , `lanczos2` , `lanczos3`                                                 | `lanczos3` |
+| dpr        | float                                                                                                             | 1          |
 
 #### Usage Example
 
@@ -316,6 +317,7 @@ const t = resize({
     background: "000000",
     position: "center",
     algorithm: "lanczos3",
+    dpr: 1,
 });
 ```
 
@@ -345,13 +347,15 @@ const t = compress({
 
 #### Supported Configuration
 
-| parameter  | type    | defaults |
-| ---------- | ------- | -------- |
-| top        | integer | 10       |
-| left       | integer | 10       |
-| bottom     | integer | 10       |
-| right      | integer | 10       |
-| background | color   | `000000` |
+| parameter  | type                                                 | defaults   |
+| ---------- | ---------------------------------------------------- | ---------- |
+| top        | integer                                              | 10         |
+| left       | integer                                              | 10         |
+| bottom     | integer                                              | 10         |
+| right      | integer                                              | 10         |
+| background | color                                                | `000000`   |
+| borderType | enum : `constant` , `replicate` , `reflect` , `wrap` | `constant` |
+| dpr        | float                                                | 1          |
 
 #### Usage Example
 
@@ -362,6 +366,8 @@ const t = extend({
     bottom: 10,
     right: 10,
     background: "000000",
+    borderType: "constant",
+    dpr: 1,
 });
 ```
 
@@ -459,19 +465,15 @@ const t = flop({});
 
 #### Supported Configuration
 
-| parameter | type    | defaults |
-| --------- | ------- | -------- |
-| sigma     | integer | 1        |
-| flat      | integer | 1        |
-| jagged    | integer | 2        |
+| parameter | type  | defaults |
+| --------- | ----- | -------- |
+| sigma     | float | 1.5      |
 
 #### Usage Example
 
 ```javascript
 const t = sharpen({
-    sigma: 1,
-    flat: 1,
-    jagged: 2,
+    sigma: 1.5,
 });
 ```
 
@@ -501,15 +503,17 @@ const t = median({
 
 #### Supported Configuration
 
-| parameter | type    | defaults |
-| --------- | ------- | -------- |
-| sigma     | integer | 1        |
+| parameter | type  | defaults |
+| --------- | ----- | -------- |
+| sigma     | float | 0.3      |
+| dpr       | float | 1        |
 
 #### Usage Example
 
 ```javascript
 const t = blur({
-    sigma: 1,
+    sigma: 0.3,
+    dpr: 1,
 });
 ```
 
@@ -584,8 +588,8 @@ const t = linear({
 
 | parameter  | type    | defaults |
 | ---------- | ------- | -------- |
-| brightness | integer | 1        |
-| saturation | integer | 1        |
+| brightness | float   | 1        |
+| saturation | float   | 1        |
 | hue        | integer | 90       |
 
 #### Usage Example
@@ -650,22 +654,44 @@ const t = toFormat({
 </details>
 
 <details>
-<summary> 20. merge </summary>
+<summary> 20. density </summary>
 
 #### Supported Configuration
 
-| parameter  | type                                                                                                                                                                                                                                                                                                                   | defaults   |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| mode       | enum : `overlay` , `underlay`                                                                                                                                                                                                                                                                                          | `overlay`  |
-| image      | file                                                                                                                                                                                                                                                                                                                   | ``         |
-| background | color                                                                                                                                                                                                                                                                                                                  | `00000000` |
-| height     | integer                                                                                                                                                                                                                                                                                                                | 0          |
-| width      | integer                                                                                                                                                                                                                                                                                                                | 0          |
-| top        | integer                                                                                                                                                                                                                                                                                                                | 0          |
-| left       | integer                                                                                                                                                                                                                                                                                                                | 0          |
-| gravity    | enum : `northwest` , `north` , `northeast` , `east` , `center` , `west` , `southwest` , `south` , `southeast` , `custom`                                                                                                                                                                                               | `center`   |
-| blend      | enum : `over` , `in` , `out` , `atop` , `dest` , `dest-over` , `dest-in` , `dest-out` , `dest-atop` , `xor` , `add` , `saturate` , `multiply` , `screen` , `overlay` , `darken` , `lighten` , `colour-dodge` , `color-dodge` , `colour-burn` , `color-burn` , `hard-light` , `soft-light` , `difference` , `exclusion` | `over`     |
-| tile       | boolean                                                                                                                                                                                                                                                                                                                | false      |
+| parameter | type    | defaults |
+| --------- | ------- | -------- |
+| density   | integer | 300      |
+
+#### Usage Example
+
+```javascript
+const t = density({
+    density: 300,
+});
+```
+
+</details>
+
+<details>
+<summary> 21. merge </summary>
+
+#### Supported Configuration
+
+| parameter      | type                                                                                                                                                                                                                                                                                                                   | defaults   |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| mode           | enum : `overlay` , `underlay` , `wrap`                                                                                                                                                                                                                                                                                 | `overlay`  |
+| image          | file                                                                                                                                                                                                                                                                                                                   | ``         |
+| transformation | string                                                                                                                                                                                                                                                                                                                 | ``         |
+| background     | color                                                                                                                                                                                                                                                                                                                  | `00000000` |
+| height         | integer                                                                                                                                                                                                                                                                                                                | 0          |
+| width          | integer                                                                                                                                                                                                                                                                                                                | 0          |
+| top            | integer                                                                                                                                                                                                                                                                                                                | 0          |
+| left           | integer                                                                                                                                                                                                                                                                                                                | 0          |
+| gravity        | enum : `northwest` , `north` , `northeast` , `east` , `center` , `west` , `southwest` , `south` , `southeast` , `custom`                                                                                                                                                                                               | `center`   |
+| blend          | enum : `over` , `in` , `out` , `atop` , `dest` , `dest-over` , `dest-in` , `dest-out` , `dest-atop` , `xor` , `add` , `saturate` , `multiply` , `screen` , `overlay` , `darken` , `lighten` , `colour-dodge` , `color-dodge` , `colour-burn` , `color-burn` , `hard-light` , `soft-light` , `difference` , `exclusion` | `over`     |
+| tile           | boolean                                                                                                                                                                                                                                                                                                                | false      |
+| listOfBboxes   | bboxList                                                                                                                                                                                                                                                                                                               |            |
+| listOfPolygons | polygonList                                                                                                                                                                                                                                                                                                            |            |
 
 #### Usage Example
 
@@ -673,6 +699,7 @@ const t = toFormat({
 const t = merge({
     mode: "overlay",
     image: "",
+    transformation: "",
     background: "00000000",
     height: 0,
     width: 0,
@@ -681,6 +708,8 @@ const t = merge({
     gravity: "center",
     blend: "over",
     tile: false,
+    listOfBboxes: null,
+    listOfPolygons: null,
 });
 ```
 
@@ -706,15 +735,17 @@ const t = bg({});
 
 #### Supported Configuration
 
-| parameter    | type                           | defaults  |
-| ------------ | ------------------------------ | --------- |
-| industryType | enum : `general` , `ecommerce` | `general` |
+| parameter    | type                                   | defaults  |
+| ------------ | -------------------------------------- | --------- |
+| industryType | enum : `general` , `ecommerce` , `car` | `general` |
+| addShadow    | boolean                                | false     |
 
 #### Usage Example
 
 ```javascript
 const t = bg({
     industryType: "general",
+    addShadow: false,
 });
 ```
 
@@ -727,21 +758,23 @@ const t = bg({
 
 #### Supported Configuration
 
-| parameter | type               | defaults |
-| --------- | ------------------ | -------- |
-| type      | enum : `2x` , `4x` | `2x`     |
+| parameter   | type               | defaults |
+| ----------- | ------------------ | -------- |
+| type        | enum : `2x` , `4x` | `2x`     |
+| enhanceFace | boolean            | false    |
 
 #### Usage Example
 
 ```javascript
 const t = upscale({
     type: "2x",
+    enhanceFace: false,
 });
 ```
 
 </details>
 
-### 5. ArtifactRemoval
+### 5. Artifact
 
 <details>
 <summary> 1. remove </summary>
@@ -759,15 +792,35 @@ const t = remove({});
 <details>
 <summary> 1. remove </summary>
 
+#### Supported Configuration
+
+| parameter  | type    | defaults      |
+| ---------- | ------- | ------------- |
+| removeText | boolean | false         |
+| removeLogo | boolean | false         |
+| box1       | string  | `0_0_100_100` |
+| box2       | string  | `0_0_0_0`     |
+| box3       | string  | `0_0_0_0`     |
+| box4       | string  | `0_0_0_0`     |
+| box5       | string  | `0_0_0_0`     |
+
 #### Usage Example
 
 ```javascript
-const t = remove({});
+const t = remove({
+    removeText: false,
+    removeLogo: false,
+    box1: "0_0_100_100",
+    box2: "0_0_0_0",
+    box3: "0_0_0_0",
+    box4: "0_0_0_0",
+    box5: "0_0_0_0",
+});
 ```
 
 </details>
 
-### 7. AWSRekognition
+### 7. AWSRekognitionPlugin
 
 <details>
 <summary> 1. detectLabels </summary>
@@ -809,7 +862,7 @@ const t = moderation({
 
 </details>
 
-### 8. GoogleVision
+### 8. GoogleVisionPlugin
 
 <details>
 <summary> 1. detectLabels </summary>
@@ -825,6 +878,117 @@ const t = moderation({
 ```javascript
 const t = detectLabels({
     maximumLabels: 5,
+});
+```
+
+</details>
+
+### 9. WatermarkDetection
+
+<details>
+<summary> 1. detect </summary>
+
+#### Supported Configuration
+
+| parameter  | type    | defaults |
+| ---------- | ------- | -------- |
+| detectText | boolean | false    |
+
+#### Usage Example
+
+```javascript
+const t = detect({
+    detectText: false,
+});
+```
+
+</details>
+
+### 10. IntelligentCrop
+
+<details>
+<summary> 1. crop </summary>
+
+#### Supported Configuration
+
+| parameter              | type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | defaults |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| requiredWidth          | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
+| requiredHeight         | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
+| paddingPercentage      | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
+| maintainOriginalAspect | boolean                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | false    |
+| aspectRatio            | string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ``       |
+| gravityTowards         | enum : `object` , `foreground` , `face` , `none`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `none`   |
+| preferredDirection     | enum : `north_west` , `north` , `north_east` , `west` , `center` , `east` , `south_west` , `south` , `south_east`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `center` |
+| objectType             | enum : `airplane` , `apple` , `backpack` , `banana` , `baseball_bat` , `baseball_glove` , `bear` , `bed` , `bench` , `bicycle` , `bird` , `boat` , `book` , `bottle` , `bowl` , `broccoli` , `bus` , `cake` , `car` , `carrot` , `cat` , `cell_phone` , `chair` , `clock` , `couch` , `cow` , `cup` , `dining_table` , `dog` , `donut` , `elephant` , `fire_hydrant` , `fork` , `frisbee` , `giraffe` , `hair_drier` , `handbag` , `horse` , `hot_dog` , `keyboard` , `kite` , `knife` , `laptop` , `microwave` , `motorcycle` , `mouse` , `orange` , `oven` , `parking_meter` , `person` , `pizza` , `potted_plant` , `refrigerator` , `remote` , `sandwich` , `scissors` , `sheep` , `sink` , `skateboard` , `skis` , `snowboard` , `spoon` , `sports_ball` , `stop_sign` , `suitcase` , `surfboard` , `teddy_bear` , `tennis_racket` , `tie` , `toaster` , `toilet` , `toothbrush` , `traffic_light` , `train` , `truck` , `tv` , `umbrella` , `vase` , `wine_glass` , `zebra` | `person` |
+
+#### Usage Example
+
+```javascript
+const t = crop({
+    requiredWidth: 0,
+    requiredHeight: 0,
+    paddingPercentage: 0,
+    maintainOriginalAspect: false,
+    aspectRatio: "",
+    gravityTowards: "none",
+    preferredDirection: "center",
+    objectType: "person",
+});
+```
+
+</details>
+
+### 11. TextDetectionandRecognition
+
+<details>
+<summary> 1. extract </summary>
+
+#### Supported Configuration
+
+| parameter  | type    | defaults |
+| ---------- | ------- | -------- |
+| detectOnly | boolean | false    |
+
+#### Usage Example
+
+```javascript
+const t = extract({
+    detectOnly: false,
+});
+```
+
+</details>
+
+### 12. NumberPlateDetection
+
+<details>
+<summary> 1. detect </summary>
+
+#### Usage Example
+
+```javascript
+const t = detect({});
+```
+
+</details>
+
+### 13. ImageCentering
+
+<details>
+<summary> 1. detect </summary>
+
+#### Supported Configuration
+
+| parameter          | type    | defaults |
+| ------------------ | ------- | -------- |
+| distancePercentage | integer | 10       |
+
+#### Usage Example
+
+```javascript
+const t = detect({
+    distancePercentage: 10,
 });
 ```
 

@@ -1,8 +1,9 @@
 import Transformation from "../transformation.js";
+import { processParams } from "../utils/transformation.utils.js";
 
 /**
- * Basic Image Library Module
- * @param {integer} height - Height* @param {integer} width - Width* @param {enum} fit - Fit* @param {color} background - Background* @param {enum} position - Position* @param {enum} algorithm - Algorithm
+ * Basic Transformations
+ * @param {integer} height - Height* @param {integer} width - Width* @param {enum} fit - Fit* @param {color} background - Background* @param {enum} position - Position* @param {enum} algorithm - Algorithm* @param {float} dpr - Dpr
  * returns Transformation
  */
 export const resize = function (
@@ -13,6 +14,7 @@ export const resize = function (
         background: "000000",
         position: "center",
         algorithm: "lanczos3",
+        dpr: 1,
     },
 ) {
     const paramIdMap = {
@@ -22,21 +24,24 @@ export const resize = function (
         background: "b",
         position: "p",
         algorithm: "k",
+        dpr: "dpr",
     };
-    const params = ["height", "width", "fit", "background", "position", "algorithm"].filter(
+    const params = ["height", "width", "fit", "background", "position", "algorithm", "dpr"].filter(
         (param) => config.hasOwnProperty(param),
     );
     const transformation = ["t.resize", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
+ * Basic Transformations
  * @param {integer} quality - Quality
  * returns Transformation
  */
@@ -51,16 +56,18 @@ export const compress = function (
     const params = ["quality"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.compress", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
- * @param {integer} top - Top* @param {integer} left - Left* @param {integer} bottom - Bottom* @param {integer} right - Right* @param {color} background - Background
+ * Basic Transformations
+ * @param {integer} top - Top* @param {integer} left - Left* @param {integer} bottom - Bottom* @param {integer} right - Right* @param {color} background - Background* @param {enum} borderType - Border type* @param {float} dpr - Dpr
  * returns Transformation
  */
 export const extend = function (
@@ -70,6 +77,8 @@ export const extend = function (
         bottom: 10,
         right: 10,
         background: "000000",
+        borderType: "constant",
+        dpr: 1,
     },
 ) {
     const paramIdMap = {
@@ -78,21 +87,25 @@ export const extend = function (
         bottom: "b",
         right: "r",
         background: "bc",
+        borderType: "bt",
+        dpr: "dpr",
     };
-    const params = ["top", "left", "bottom", "right", "background"].filter((param) =>
-        config.hasOwnProperty(param),
+    const params = ["top", "left", "bottom", "right", "background", "borderType", "dpr"].filter(
+        (param) => config.hasOwnProperty(param),
     );
     const transformation = ["t.extend", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
+ * Basic Transformations
  * @param {integer} top - Top* @param {integer} left - Left* @param {integer} height - Height* @param {integer} width - Width
  * returns Transformation
  */
@@ -115,15 +128,17 @@ export const extract = function (
     );
     const transformation = ["t.extract", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
+ * Basic Transformations
  * @param {integer} threshold - Threshold
  * returns Transformation
  */
@@ -138,15 +153,17 @@ export const trim = function (
     const params = ["threshold"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.trim", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
+ * Basic Transformations
  * @param {integer} angle - Angle* @param {color} background - Background
  * returns Transformation
  */
@@ -163,15 +180,17 @@ export const rotate = function (
     const params = ["angle", "background"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.rotate", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
-* Basic Image Library Module
+* Basic Transformations
 
 * returns Transformation
 */
@@ -180,15 +199,17 @@ export const flip = function (config = {}) {
     const params = [].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.flip", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
-* Basic Image Library Module
+* Basic Transformations
 
 * returns Transformation
 */
@@ -197,42 +218,42 @@ export const flop = function (config = {}) {
     const params = [].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.flop", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
- * @param {integer} sigma - Sigma* @param {integer} flat - Flat* @param {integer} jagged - Jagged
+ * Basic Transformations
+ * @param {float} sigma - Sigma
  * returns Transformation
  */
 export const sharpen = function (
     config = {
-        sigma: 1,
-        flat: 1,
-        jagged: 2,
+        sigma: 1.5,
     },
 ) {
     const paramIdMap = {
         sigma: "s",
-        flat: "f",
-        jagged: "j",
     };
-    const params = ["sigma", "flat", "jagged"].filter((param) => config.hasOwnProperty(param));
+    const params = ["sigma"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.sharpen", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
+ * Basic Transformations
  * @param {integer} size - Size
  * returns Transformation
  */
@@ -247,38 +268,44 @@ export const median = function (
     const params = ["size"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.median", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
- * @param {integer} sigma - Sigma
+ * Basic Transformations
+ * @param {float} sigma - Sigma* @param {float} dpr - Dpr
  * returns Transformation
  */
 export const blur = function (
     config = {
-        sigma: 1,
+        sigma: 0.3,
+        dpr: 1,
     },
 ) {
     const paramIdMap = {
         sigma: "s",
+        dpr: "dpr",
     };
-    const params = ["sigma"].filter((param) => config.hasOwnProperty(param));
+    const params = ["sigma", "dpr"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.blur", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
+ * Basic Transformations
  * @param {color} background - Background
  * returns Transformation
  */
@@ -293,15 +320,17 @@ export const flatten = function (
     const params = ["background"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.flatten", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
-* Basic Image Library Module
+* Basic Transformations
 
 * returns Transformation
 */
@@ -310,15 +339,17 @@ export const negate = function (config = {}) {
     const params = [].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.negate", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
-* Basic Image Library Module
+* Basic Transformations
 
 * returns Transformation
 */
@@ -327,15 +358,17 @@ export const normalise = function (config = {}) {
     const params = [].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.normalise", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
+ * Basic Transformations
  * @param {integer} a - A* @param {integer} b - B
  * returns Transformation
  */
@@ -352,16 +385,18 @@ export const linear = function (
     const params = ["a", "b"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.linear", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
- * @param {integer} brightness - Brightness* @param {integer} saturation - Saturation* @param {integer} hue - Hue
+ * Basic Transformations
+ * @param {float} brightness - Brightness* @param {float} saturation - Saturation* @param {integer} hue - Hue
  * returns Transformation
  */
 export const modulate = function (
@@ -381,15 +416,17 @@ export const modulate = function (
     );
     const transformation = ["t.modulate", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
-* Basic Image Library Module
+* Basic Transformations
 
 * returns Transformation
 */
@@ -398,15 +435,17 @@ export const grey = function (config = {}) {
     const params = [].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.grey", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
+ * Basic Transformations
  * @param {color} color - Color
  * returns Transformation
  */
@@ -421,15 +460,17 @@ export const tint = function (
     const params = ["color"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.tint", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
+ * Basic Transformations
  * @param {enum} format - Format
  * returns Transformation
  */
@@ -444,22 +485,50 @@ export const toFormat = function (
     const params = ["format"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.toFormat", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
 
 /**
- * Basic Image Library Module
- * @param {enum} mode - Mode* @param {file} image - Image* @param {color} background - Background* @param {integer} height - Height* @param {integer} width - Width* @param {integer} top - Top* @param {integer} left - Left* @param {enum} gravity - Gravity* @param {enum} blend - Blend* @param {boolean} tile - Tile
+ * Basic Transformations
+ * @param {integer} density - Density
+ * returns Transformation
+ */
+export const density = function (
+    config = {
+        density: 300,
+    },
+) {
+    const paramIdMap = {
+        density: "d",
+    };
+    const params = ["density"].filter((param) => config.hasOwnProperty(param));
+    const transformation = ["t.density", "("];
+    params.map((param, idx) => {
+        processParams(config, params, transformation, paramIdMap, param, idx);
+    });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
+    transformation.push(")");
+    return new Transformation([transformation.join("")]);
+};
+
+/**
+ * Basic Transformations
+ * @param {enum} mode - Mode* @param {file} image - Image* @param {string} transformation - Transformation* @param {color} background - Background* @param {integer} height - Height* @param {integer} width - Width* @param {integer} top - Top* @param {integer} left - Left* @param {enum} gravity - Gravity* @param {enum} blend - Blend* @param {boolean} tile - Tile* @param {bboxList} listOfBboxes - List of bboxes* @param {polygonList} listOfPolygons - List of polygons
  * returns Transformation
  */
 export const merge = function (
     config = {
         mode: "overlay",
         image: "",
+        transformation: "",
         background: "00000000",
         height: 0,
         width: 0,
@@ -468,11 +537,14 @@ export const merge = function (
         gravity: "center",
         blend: "over",
         tile: false,
+        listOfBboxes: null,
+        listOfPolygons: null,
     },
 ) {
     const paramIdMap = {
         mode: "m",
         image: "i",
+        transformation: "tr",
         background: "bg",
         height: "h",
         width: "w",
@@ -481,10 +553,13 @@ export const merge = function (
         gravity: "g",
         blend: "b",
         tile: "r",
+        listOfBboxes: "bboxes",
+        listOfPolygons: "polys",
     };
     const params = [
         "mode",
         "image",
+        "transformation",
         "background",
         "height",
         "width",
@@ -493,12 +568,16 @@ export const merge = function (
         "gravity",
         "blend",
         "tile",
+        "listOfBboxes",
+        "listOfPolygons",
     ].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.merge", "("];
     params.map((param, idx) => {
-        transformation.push(`${paramIdMap[param]}:${config[param]}`);
-        if (idx !== params.length - 1) transformation.push(",");
+        processParams(config, params, transformation, paramIdMap, param, idx);
     });
+    if (transformation.length && transformation[transformation.length - 1] === ",") {
+        transformation.pop();
+    }
     transformation.push(")");
     return new Transformation([transformation.join("")]);
 };
@@ -523,5 +602,6 @@ export default {
     grey,
     tint,
     toFormat,
+    density,
     merge,
 };
