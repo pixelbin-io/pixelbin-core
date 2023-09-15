@@ -1,19 +1,42 @@
-import { getUrlParts } from "./common.utils";
-import { version2Regex, zoneSlug } from "./regex";
 import {
     PDKInvalidUrlError,
     PDKIllegalArgumentError,
     PDKIllegalQueryParameterError,
+    PDKTransformationError,
 } from "../errors/PixelbinErrors";
+import { getUrlParts } from "./common.utils";
+import { version2Regex, zoneSlug } from "./regex";
+
+const OPERATION_SEPARATOR = "~";
+const PARAMETER_SEPARATOR = ",";
+const PARAMETER_LINK = ":";
 
 export const getUrlFromObj = function (obj, config) {
     if (!obj.baseUrl) obj["baseUrl"] = "https://cdn.pixelbin.io";
-    if (!obj.cloudName) throw new PDKIllegalArgumentError("key cloudName should be defined");
-    if (!obj.filePath) throw new PDKIllegalArgumentError("key filePath should be defined");
-    obj["pattern"] = getPatternFromTransformations(obj["transformations"], config) || "original";
+    if (!config.isCustomDomain && !obj.cloudName) {
+        throw new PDKIllegalArgumentError("key cloudName should be defined");
+    }
+    if (config.isCustomDomain && obj.cloudName) {
+        throw new PDKIllegalArgumentError("key cloudName is not valid for custom domains");
+    }
+    if (!obj.worker && !obj.filePath)
+        throw new PDKIllegalArgumentError("key filePath should be defined");
+    if (obj.worker && typeof obj.workerPath !== "string")
+        throw new PDKIllegalArgumentError("key workerPath should be a defined");
+    if (obj.worker) {
+        obj["pattern"] = "wrkr";
+    } else {
+        obj["pattern"] =
+            getPatternFromTransformations(obj["transformations"], config) || "original";
+    }
     if (!obj.version || !version2Regex.test(obj.version)) obj.version = "v2";
     if (!obj.zone || !zoneSlug.test(obj.zone)) obj.zone = "";
-    const urlKeySorted = ["baseUrl", "version", "cloudName", "zone", "pattern", "filePath"];
+    const urlKeySorted = ["baseUrl", "version", "cloudName", "zone", "pattern"];
+    if (obj.worker) {
+        urlKeySorted.push("workerPath");
+    } else {
+        urlKeySorted.push("filePath");
+    }
     const urlArr = [];
     urlKeySorted.forEach((key) => {
         if (obj[key]) urlArr.push(obj[key]);
@@ -22,8 +45,7 @@ export const getUrlFromObj = function (obj, config) {
     if (obj.options) {
         const { dpr, f_auto } = obj.options;
         if (dpr) {
-            validateDPR(dpr);
-            queryArr.push(`dpr=${dpr}`);
+            queryArr.push(`dpr=${parseDPR(dpr)}`);
         }
         if (f_auto) {
             validateFAuto(f_auto);
@@ -35,8 +57,103 @@ export const getUrlFromObj = function (obj, config) {
     return urlStr;
 };
 
-const getPartsFromUrl = function (url) {
-    const parts = getUrlParts(url);
+export const getObjFromUrl = function (url, config, flatten) {
+    const parts = getPartsFromUrl(url, config);
+    try {
+        // Worker requests won't have a pattern
+        parts.transformations = parts.pattern
+            ? getTransformationDetailsFromPattern(parts.pattern, url, config, flatten)
+            : [];
+    } catch (err) {
+        throw new PDKInvalidUrlError("Error Processing url. Please check the url is correct");
+    }
+    return parts;
+};
+
+export const getUnArchivedPresets = (presets) => {
+    return presets.filter((ele) => !ele.archived);
+};
+
+export const rgbHex = function (red, green, blue, alpha) {
+    const isPercent = (red + (alpha || "")).toString().includes("%");
+
+    if (typeof red === "string") {
+        [red, green, blue, alpha] = red
+            .match(/(0?\.?\d{1,3})%?\b/g)
+            .map((component) => Number(component));
+    } else if (alpha !== undefined) {
+        alpha = Number.parseFloat(alpha);
+    }
+
+    if (
+        typeof red !== "number" ||
+        typeof green !== "number" ||
+        typeof blue !== "number" ||
+        red > 255 ||
+        green > 255 ||
+        blue > 255
+    ) {
+        throw new TypeError("Expected three numbers below 256");
+    }
+
+    if (typeof alpha === "number") {
+        if (!isPercent && alpha >= 0 && alpha <= 1) {
+            alpha = Math.round(255 * alpha);
+        } else if (isPercent && alpha >= 0 && alpha <= 100) {
+            alpha = Math.round((255 * alpha) / 100);
+        } else {
+            throw new TypeError(`Expected alpha value (${alpha}) as a fraction or percentage`);
+        }
+
+        alpha = (alpha | (1 << 8)).toString(16).slice(1); // eslint-disable-line no-bitwise
+    } else {
+        alpha = "";
+    }
+    /* eslint-disable no-bitwise */
+    return (blue | (green << 8) | (red << 16) | (1 << 24)).toString(16).slice(1) + alpha;
+    /* eslint-enable no-bitwise */
+};
+
+export const getPatternFromTransformations = function (transformationList, config) {
+    return transformationList?.length
+        ? transformationList
+              .map((o) => {
+                  /* eslint-disable no-prototype-builtins */
+                  if (o.hasOwnProperty("name")) {
+                      /* eslint-enable no-prototype-builtins */
+                      o.values = o.values || [];
+                      const paramsStr = o.values
+                          .map(({ key, value }) => {
+                              if (!key) {
+                                  throw new PDKIllegalArgumentError(
+                                      `key not specified in '${o.name}'`,
+                                  );
+                              }
+                              if (!value) {
+                                  throw new PDKIllegalArgumentError(
+                                      `value not specified for key '${key}' in '${o.name}'`,
+                                  );
+                              }
+                              return `${key}:${value}`;
+                          })
+                          .join(config.parameterSeparator);
+                      if (o.plugin === "p") {
+                          return paramsStr
+                              ? `${o.plugin}:${o.name}(${paramsStr})`
+                              : `${o.plugin}:${o.name}`;
+                      }
+                      return `${o.plugin}.${o.name}(${paramsStr})`;
+                  } else {
+                      return null;
+                  }
+              })
+              .filter((ele) => ele) // Remove invalid transforms.
+              .join(config.operationSeparator)
+        : null;
+};
+
+export const getPartsFromUrl = function (url, config) {
+    const parts = getUrlParts(url, config);
     const queryObj = processQueryParams(parts);
 
     return {
@@ -46,6 +163,8 @@ const getPartsFromUrl = function (url) {
         version: parts["version"],
         zone: parts["zoneSlug"],
         cloudName: parts["cloudName"],
+        worker: parts["worker"],
+        workerPath: parts["workerPath"],
         options: { ...queryObj },
     };
 };
@@ -58,13 +177,15 @@ function removeLeadingDash(str) {
 }
 
 function getParamsList(dSplit, prefix) {
-    return removeLeadingDash(dSplit.split("(")[1].replace(")", "").replace(prefix, "")).split(",");
+    return removeLeadingDash(dSplit.split("(")[1].replace(")", "").replace(prefix, "")).split(
+        PARAMETER_SEPARATOR,
+    );
 }
 
 function getParamsObject(paramsList) {
     const params = {};
     paramsList.forEach((item) => {
-        const [param, val] = item.split(":");
+        const [param, val] = item.split(PARAMETER_LINK);
         if (param) params[param] = val;
     });
     return params;
@@ -107,10 +228,6 @@ const getTransformationDetailsFromPattern = function (pattern, url, config, flat
     const dSplit = pattern.split(config.operationSeparator);
     let opts = dSplit
         .map((x) => {
-            // if (x.startsWith("p:")) {
-            //     const [, presetString] = x.split(":");
-            //     x = `p.apply(n:${presetString})`
-            // }
             let { name, plugin, values } = getOperationDetailsFromOperation(x);
             if (values && Object.keys(values).length) {
                 values = Object.keys(values).map((key) => {
@@ -137,102 +254,128 @@ const getTransformationDetailsFromPattern = function (pattern, url, config, flat
     return opts;
 };
 
-export const getObjFromUrl = function (url, config, flatten) {
-    const parts = getPartsFromUrl(url);
-    try {
-        parts.transformations = parts.pattern
-            ? getTransformationDetailsFromPattern(parts.pattern, url, config, flatten)
-            : [];
-    } catch (err) {
-        throw new PDKInvalidUrlError("Error Processing url. Please check the url is correct");
-    }
-    return parts;
-};
+export function flattenTrnsfrmPattern(pattern, presets) {
+    const transformations = pattern.split(OPERATION_SEPARATOR);
+    const flattenedTransformations = [];
+    transformations.forEach((ele) => {
+        let preset;
 
-export const getPatternFromTransformations = function (transformationList, config) {
-    return transformationList?.length
-        ? transformationList
-              .map((o) => {
-                  if (o.hasOwnProperty("name")) {
-                      o.values = o.values || [];
-                      const paramsStr = o.values
-                          .map(({ key, value }) => {
-                              if (!key) {
-                                  throw new PDKIllegalArgumentError(
-                                      `key not specified in '${o.name}'`,
-                                  );
-                              }
-                              if (!value) {
-                                  throw new PDKIllegalArgumentError(
-                                      `value not specified for key '${key}' in '${o.name}'`,
-                                  );
-                              }
-                              return `${key}:${value}`;
-                          })
-                          .join(config.parameterSeparator);
-                      if (o.plugin === "p") {
-                          return paramsStr
-                              ? `${o.plugin}:${o.name}(${paramsStr})`
-                              : `${o.plugin}:${o.name}`;
-                      }
-                      return `${o.plugin}.${o.name}(${paramsStr})`;
-                  } else {
-                      return null;
-                  }
-              })
-              .filter((ele) => ele) // Remove invalid transforms.
-              .join(config.operationSeparator)
-        : null;
-};
-
-export const getUnArchivedPresets = (presets) => {
-    return presets.filter((ele) => !ele.archived);
-};
-
-export const rgbHex = function (red, green, blue, alpha) {
-    const isPercent = (red + (alpha || "")).toString().includes("%");
-
-    if (typeof red === "string") {
-        [red, green, blue, alpha] = red
-            .match(/(0?\.?\d{1,3})%?\b/g)
-            .map((component) => Number(component));
-    } else if (alpha !== undefined) {
-        alpha = Number.parseFloat(alpha);
-    }
-
-    if (
-        typeof red !== "number" ||
-        typeof green !== "number" ||
-        typeof blue !== "number" ||
-        red > 255 ||
-        green > 255 ||
-        blue > 255
-    ) {
-        throw new TypeError("Expected three numbers below 256");
-    }
-
-    if (typeof alpha === "number") {
-        if (!isPercent && alpha >= 0 && alpha <= 1) {
-            alpha = Math.round(255 * alpha);
-        } else if (isPercent && alpha >= 0 && alpha <= 100) {
-            alpha = Math.round((255 * alpha) / 100);
-        } else {
-            throw new TypeError(`Expected alpha value (${alpha}) as a fraction or percentage`);
+        // Check if element is a preset
+        if (ele.startsWith("p:")) {
+            preset = ele.split("p:")[1].split("(")[0]; // now preset can be "p:presetName" or "p:presetName()"
+        } else if (ele.startsWith("p.apply")) {
+            const presetParams = getParamsObject(getParamsList(ele));
+            if (!presetParams.n) {
+                throw new PDKTransformationError(`Missing param 'n' for preset: ${ele}`);
+            }
+            preset = presetParams.n;
         }
 
-        alpha = (alpha | (1 << 8)).toString(16).slice(1); // eslint-disable-line no-bitwise
-    } else {
-        alpha = "";
+        // If current element is a preset, push its transformations to the list, only if it's valid.
+        if (preset) {
+            if (presets[preset]) {
+                const presetTransformation = flattenPreset(ele, presets[preset]);
+                flattenedTransformations.push(...presetTransformation.split(OPERATION_SEPARATOR));
+            } else {
+                throw new PDKTransformationError(`Invalid preset: ${preset}`);
+            }
+        } else {
+            flattenedTransformations.push(ele);
+        }
+    });
+    return flattenedTransformations.join(OPERATION_SEPARATOR);
+}
+
+function getPresetNameAndPattern(preset) {
+    let presetName;
+    let presetPattern;
+    if (preset.startsWith("p:")) {
+        presetPattern = preset.split("p:")[1];
+        presetName = presetPattern.split("(")[0];
+    }
+    if (preset.startsWith("p.apply")) {
+        let intContent = preset.slice(preset.indexOf("(") + 1).replace(")", "");
+        const presetParams = getParamsObject(getParamsList(preset));
+        presetName = presetParams.n;
+        presetPattern = intContent.slice(intContent.indexOf(PARAMETER_LINK) + 1);
     }
 
-    return (blue | (green << 8) | (red << 16) | (1 << 24)).toString(16).slice(1) + alpha; // eslint-disable-line no-bitwise
-};
+    return { presetName, presetPattern };
+}
 
-const validateDPR = (dpr) => {
+function flattenPreset(preset, presetConfig) {
+    let { presetName, presetPattern } = getPresetNameAndPattern(preset);
+
+    let { transformation, params: paramsConfig } = presetConfig;
+
+    const isVariableSupport = transformation.includes("$");
+    if (isVariableSupport) {
+        const paramsConfigKeyList = Object.keys(paramsConfig);
+        if (paramsConfigKeyList.length <= 0) {
+            throw new PDKTransformationError(`Params config of preset ${presetName} is empty`);
+        }
+
+        const patternParamsList = presetPattern.includes("(") ? getParamsList(presetPattern) : [];
+        const patternParamsObj = getParamsObject(patternParamsList);
+
+        const transformationList = transformation.split(OPERATION_SEPARATOR);
+
+        let transformationStr = transformation;
+        transformationList.forEach((EachTransformation) => {
+            if (EachTransformation.includes("$")) {
+                const prstParamsList = getParamsList(EachTransformation);
+                const prstParamsObj = getParamsObject(prstParamsList);
+
+                const prstParamsKeyList = Object.keys(prstParamsObj);
+
+                prstParamsKeyList.forEach((prstParamsKey) => {
+                    const prstParamsVal = prstParamsObj[prstParamsKey].replace("$", "");
+
+                    let variableConfig = paramsConfig[prstParamsVal];
+                    if (variableConfig) {
+                        if (!patternParamsObj[prstParamsVal]) {
+                            patternParamsObj[prstParamsVal] = variableConfig.default;
+                        }
+
+                        if (
+                            !validators[variableConfig.type](
+                                patternParamsObj[prstParamsVal],
+                                variableConfig,
+                            )
+                        ) {
+                            throw new PDKTransformationError(
+                                `Value for '${prstParamsKey}' in '${presetName}' must be a type of ${variableConfig.type}`,
+                            );
+                        }
+
+                        // replace $variable_name with val
+                        transformationStr = transformationStr.replace(
+                            `$${prstParamsVal}`,
+                            patternParamsObj[prstParamsVal],
+                        );
+                    } else {
+                        throw new PDKTransformationError(
+                            `Variable object not defined for the variable $${prstParamsKey}`,
+                        );
+                    }
+                });
+            }
+        });
+
+        return transformationStr;
+    } else {
+        return transformation;
+    }
+}
+
+const parseDPR = (dpr) => {
+    if (dpr === "auto") return dpr;
+    dpr = +dpr;
     if (isNaN(dpr) || dpr < 0.1 || dpr > 5.0)
         throw new PDKIllegalQueryParameterError(
             "DPR value should be numeric and should be between 0.1 to 5.0",
         );
+    return dpr;
 };
 
 const validateFAuto = (f_auto) => {
@@ -246,9 +389,8 @@ const processQueryParams = (urlParts) => {
     for (const params of queryParams) {
         const queryElements = params.split("=");
         if (queryElements[0] === "dpr") {
-            const dpr = +queryElements[1];
-            validateDPR(dpr);
-            queryObj[queryElements[0]] = dpr;
+            const dpr = queryElements[1];
+            queryObj[queryElements[0]] = parseDPR(dpr);
         }
         if (queryElements[0] === "f_auto") {
             const f_auto = queryElements[1].toLowerCase() === "true";
@@ -257,6 +399,25 @@ const processQueryParams = (urlParts) => {
         }
     }
     return queryObj;
+};
+
+/**
+ * Check if transformation is a preset
+ * @param {string} ele
+ * @returns {boolean}
+ */
+export const isPreset = (ele) => {
+    return ele.startsWith("p:") || ele.startsWith("p.apply");
+};
+
+/**
+ * Check if pattern contains presets only
+ * @param {string} pattern
+ * @returns {boolean}
+ */
+export const checkPresetOnly = (pattern) => {
+    const transformations = pattern.split(OPERATION_SEPARATOR);
+    return transformations.every(isPreset);
 };
 
 export const processParams = (config, params, transformation, paramIdMap, param, idx) => {
