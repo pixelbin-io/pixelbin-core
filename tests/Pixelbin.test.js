@@ -286,4 +286,32 @@ describe("SDK tests", () => {
             "https://cdn.pixelbin.io/v2/cloudname/t.resize(h:200,w:148)~imc.detect(dist_perc:20)~sr.upscale(t:4x)/test-image.jpeg",
         );
     });
+    it("should support wrkr urls - default zone", async () => {
+        const pixelbin = new Pixelbin({
+            cloudName: "cloudname",
+            zone: "default",
+        });
+        const image = pixelbin.image(
+            "jmrtz0/department/pictures/square-logo/resize-w:1180/iTEIKwfNT-6047.png",
+            { worker: true },
+        );
+
+        expect(image.getUrl()).toBe(
+            "https://cdn.pixelbin.io/v2/cloudname/wrkr/jmrtz0/department/pictures/square-logo/resize-w:1180/iTEIKwfNT-6047.png",
+        );
+    });
+    it("should support wrkr urls - non-default zone", async () => {
+        const pixelbin = new Pixelbin({
+            cloudName: "cloudname",
+            zone: "abcdef",
+        });
+        const image = pixelbin.image(
+            "jmrtz0/department/pictures/square-logo/resize-w:1180/disco-6047.png",
+            { worker: true },
+        );
+
+        expect(image.getUrl()).toBe(
+            "https://cdn.pixelbin.io/v2/cloudname/abcdef/wrkr/jmrtz0/department/pictures/square-logo/resize-w:1180/disco-6047.png",
+        );
+    });
 });

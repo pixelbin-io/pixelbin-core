@@ -7,3 +7,6 @@ export class PDKIllegalArgumentError extends Error {
 export class PDKIllegalQueryParameterError extends Error {
     constructor(message: any);
 }
+export class PDKTransformationError extends Error {
+    constructor(message: any);
+}

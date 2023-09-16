@@ -5,7 +5,7 @@ Pixelbin Core SDK helps you integrate Pixelbin with your Frontend JS Application
 ## Installation
 
 ```
-npm install  @pixelbin/core --save
+npm install @pixelbin/core --save
 ```
 
 ## Usage
@@ -61,10 +61,10 @@ console.log(demoImage.getUrl());
 
 ### Add Pixelbin to HTML
 
-Add the [this](./dist) distributable in a script tag along with axios
+Add the [this](./dist) distributable in a script tag
 
 ```html
-<script src="pixelbin.v4.0.0.js"></script>
+<script src="pixelbin.v5.0.0.js"></script>
 ```
 
 ```javascript
@@ -139,20 +139,26 @@ Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
 
 Deconstruct a pixelbin url
 
-| parameter            | description          | example                                                                                               |
-| -------------------- | -------------------- | ----------------------------------------------------------------------------------------------------- |
-| pixelbinUrl (string) | A valid pixelbin url | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
+| Parameter             | Description                                                        | Example                                                                                               |
+| --------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `url` (string)        | A valid Pixelbin URL                                               | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
+| `opts` (Object)       | Options for the conversion                                         | Default: `{ isCustomDomain: false }`                                                                  |
+| `opts.isCustomDomain` | Indicates if the URL belongs to a custom domain (default: `false`) |
 
 **Returns**:
 
-| property                | description                            | example                    |
-| ----------------------- | -------------------------------------- | -------------------------- |
-| cloudName (string)      | The cloudname extracted from the url   | `your-cloud-name`          |
-| zone (string)           | 6 character zone slug                  | `z-slug`                   |
-| version (string)        | cdn api version                        | `v2`                       |
-| transformations (array) | Extracted transformations from the url |                            |
-| filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`      |
-| baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/` |
+| Property                  | Description                                          | Example                               |
+| ------------------------- | ---------------------------------------------------- | ------------------------------------- |
+| `baseURL` (string)        | Base path of the URL                                 | `https://cdn.pixelbin.io`             |
+| `filePath` (string)       | Path to the file on Pixelbin storage                 | `/path/to/image.jpeg`                 |
+| `version` (string)        | Version of the URL                                   | `v2`                                  |
+| `cloudName` (string)      | Cloud name from the URL                              | `your-cloud-name`                     |
+| `transformations` (array) | A list of transformation objects                     | `[{ "plugin": "t", "name": "flip" }]` |
+| `zone` (string)           | Zone slug from the URL                               | `z-slug`                              |
+| `pattern` (string)        | Transformation pattern extracted from the URL        | `t.resize(h:100,w:200)~t.flip()`      |
+| `worker` (boolean)        | Indicates if the URL is a URL Translation Worker URL | `false`                               |
+| `workerPath` (string)     | Input path to a URL Translation Worker               | `resize:w200,h400/folder/image.jpeg`  |
+| `options` (Object)        | Query parameters added, such as "dpr" and "f_auto"   | `{ dpr: 2.5, f_auto: true}`           |
 
 Example:
 
@@ -187,7 +193,66 @@ const obj = Pixelbin.utils.urlToObj(pixelbinUrl);
 //         }
 //     ],
 //     "filePath": "path/to/image.jpeg",
+//     "baseUrl": "https://cdn.pixelbin.io",
+//     "wrkr": false,
+//     "workerPath": "",
+//     "options": {}
+// }
+```
+
+```javascript
+const customDomainUrl =
+    "https://xyz.designify.media/v2/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
+
+const obj = Pixelbin.utils.urlToObj(customDomainUrl, { isCustomDomain: true });
+// obj
+// {
+//     "zone": "z-slug",
+//     "version": "v2",
+//     "transformations": [
+//         {
+//             "plugin": "t",
+//             "name": "resize",
+//             "values": [
+//                 {
+//                     "key": "h",
+//                     "value": "100"
+//                 },
+//                 {
+//                     "key": "w",
+//                     "value": "200"
+//                 }
+//             ]
+//         },
+//         {
+//             "plugin": "t",
+//             "name": "flip",
+//         }
+//     ],
+//     "filePath": "path/to/image.jpeg",
+//     "baseUrl": "https://xyz.designify.media",
+//     "wrkr": false,
+//     "workerPath": "",
+//     "options": {}
+// }
+```
+
+```javascript
+const workerUrl =
+    "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/wrkr/resize:h100,w:200/folder/image.jpeg";
+
+const obj = Pixelbin.utils.urlToObj(pixelbinUrl);
+// obj
+// {
+//     "cloudName": "your-cloud-name",
+//     "zone": "z-slug",
+//     "version": "v2",
+//     "transformations": [],
+//     "filePath": "",
+//     "worker": true,
+//     "workerPath": "resize:h100,w:200/folder/image.jpeg",
 //     "baseUrl": "https://cdn.pixelbin.io"
+//     "options": {}
 // }
 ```
 
@@ -195,14 +260,18 @@ const obj = Pixelbin.utils.urlToObj(pixelbinUrl);
 
 Converts the extracted url obj to a Pixelbin url.
 
-| property                | description                            | example                    |
-| ----------------------- | -------------------------------------- | -------------------------- |
-| cloudName (string)      | The cloudname extracted from the url   | `your-cloud-name`          |
-| zone (string)           | 6 character zone slug                  | `z-slug`                   |
-| version (string)        | cdn api version                        | `v2`                       |
-| transformations (array) | Extracted transformations from the url |                            |
-| filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`      |
-| baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/` |
+| Property                   | Description                                          | Example                               |
+| -------------------------- | ---------------------------------------------------- | ------------------------------------- |
+| `cloudName` (string)       | The cloudname extracted from the URL                 | `your-cloud-name`                     |
+| `zone` (string)            | 6 character zone slug                                | `z-slug`                              |
+| `version` (string)         | CDN API version                                      | `v2`                                  |
+| `transformations` (array)  | Extracted transformations from the URL               | `[{ "plugin": "t", "name": "flip" }]` |
+| `filePath` (string)        | Path to the file on Pixelbin storage                 | `/path/to/image.jpeg`                 |
+| `baseUrl` (string)         | Base URL                                             | `https://cdn.pixelbin.io/`            |
+| `isCustomDomain` (boolean) | Indicates if the URL is for a custom domain          | `false`                               |
+| `worker` (boolean)         | Indicates if the URL is a URL Translation Worker URL | `false`                               |
+| `workerPath` (string)      | Input path to a URL Translation Worker               | `resize:w200,h400/folder/image.jpeg`  |
+| `options` (Object)         | Query parameters added, such as "dpr" and "f_auto"   | `{ "dpr": "2", "f_auto": "true" }`    |
 
 ```javascript
 const obj = {
@@ -235,6 +304,59 @@ const obj = {
 const url = Pixelbin.utils.objToUrl(obj); // obj is as shown above
 // url
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg
+```
+
+Usage with custom domain
+
+```javascript
+const obj = {
+    zone: "z-slug",
+    version: "v2",
+    transformations: [
+        {
+            plugin: "t",
+            name: "resize",
+            values: [
+                {
+                    key: "h",
+                    value: "100",
+                },
+                {
+                    key: "w",
+                    value: "200",
+                },
+            ],
+        },
+        {
+            plugin: "t",
+            name: "flip",
+        },
+    ],
+    filePath: "path/to/image.jpeg",
+    baseUrl: "https://xyz.designify.media",
+    isCustomDomain: true,
+};
+const url = Pixelbin.utils.objToUrl(obj); // obj is as shown above
+// url
+// https://xyz.designify.media/v2/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg
+```
+
+Usage with URL Translation Worker
+
+```javascript
+const obj = {
+    cloudName: "your-cloud-name",
+    zone: "z-slug",
+    version: "v2",
+    transformations: [],
+    filePath: "",
+    worker: true,
+    workerPath: "resize:h100,w:200/folder/image.jpeg",
+    baseUrl: "https://cdn.pixelbin.io",
+};
+const url = Pixelbin.utils.objToUrl(obj); // obj is as shown above
+// url
+// https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/wrkr/resize:h100,w:200/folder/image.jpeg
 ```
 
 ## Transformation
@@ -270,6 +392,11 @@ const t3 = t1.pipe(t2);
 Image class represents an image on Pixelbin.
 
 ```javascript
+//To use the url translation worker feature, call image method on the pixelbin object whilst passing `worker` as true;
+const image = pixelbin.image("path/to/image", { worker: true });
+```
+
+```javascript
 //To create an Image, call image method on the pixelbin object;
 const image = pixelbin.image("path/to/image");
 ```
@@ -279,6 +406,8 @@ Transformations can be set on an image by using `setTransformation` on the image
 ```javascript
 image.setTransformation(t);
 ```
+
+Note: Transformations won't be applied to the worker URLs generated from the SDK.
 
 To get the url of the image with the applied transformations, use the `getUrl` on the image object.
 
@@ -290,7 +419,338 @@ For a working example, refer [here](#transform-and-optimize-images)
 
 ## List of supported transformations
 
-### 1. Basic
+### 1. DetectBackgroundType
+
+<details>
+<summary> 1. detect </summary>
+
+#### Usage Example
+
+```javascript
+const t = detect({});
+```
+
+</details>
+
+### 2. Artifact
+
+<details>
+<summary> 1. remove </summary>
+
+#### Usage Example
+
+```javascript
+const t = remove({});
+```
+
+</details>
+
+### 3. AWSRekognitionPlugin
+
+<details>
+<summary> 1. detectLabels </summary>
+
+#### Supported Configuration
+
+| parameter         | type    | defaults |
+| ----------------- | ------- | -------- |
+| maximumLabels     | integer | 5        |
+| minimumConfidence | integer | 55       |
+
+#### Usage Example
+
+```javascript
+const t = detectLabels({
+    maximumLabels: 5,
+    minimumConfidence: 55,
+});
+```
+
+</details>
+
+<details>
+<summary> 2. moderation </summary>
+
+#### Supported Configuration
+
+| parameter         | type    | defaults |
+| ----------------- | ------- | -------- |
+| minimumConfidence | integer | 55       |
+
+#### Usage Example
+
+```javascript
+const t = moderation({
+    minimumConfidence: 55,
+});
+```
+
+</details>
+
+### 4. BackgroundGenerator
+
+<details>
+<summary> 1. bg </summary>
+
+#### Supported Configuration
+
+| parameter                | type                            | defaults                                                                                         |
+| ------------------------ | ------------------------------- | ------------------------------------------------------------------------------------------------ |
+| backgroundPrompt         | custom                          | `cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw` |
+| backgroundImageForShadow | file                            | ``                                                                                               |
+| focus                    | enum : `Product` , `Background` | `Product`                                                                                        |
+| negativePrompt           | custom                          | ``                                                                                               |
+| seed                     | integer                         | 123                                                                                              |
+
+#### Usage Example
+
+```javascript
+const t = bg({
+    backgroundPrompt:
+        "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw",
+    backgroundImageForShadow: "",
+    focus: "Product",
+    negativePrompt: "",
+    seed: 123,
+});
+```
+
+</details>
+
+### 5. EraseBG
+
+<details>
+<summary> 1. bg </summary>
+
+#### Supported Configuration
+
+| parameter    | type                                   | defaults  |
+| ------------ | -------------------------------------- | --------- |
+| industryType | enum : `general` , `ecommerce` , `car` | `general` |
+| addShadow    | boolean                                | false     |
+
+#### Usage Example
+
+```javascript
+const t = bg({
+    industryType: "general",
+    addShadow: false,
+});
+```
+
+</details>
+
+### 6. GoogleVisionPlugin
+
+<details>
+<summary> 1. detectLabels </summary>
+
+#### Supported Configuration
+
+| parameter     | type    | defaults |
+| ------------- | ------- | -------- |
+| maximumLabels | integer | 5        |
+
+#### Usage Example
+
+```javascript
+const t = detectLabels({
+    maximumLabels: 5,
+});
+```
+
+</details>
+
+### 7. ImageCentering
+
+<details>
+<summary> 1. detect </summary>
+
+#### Supported Configuration
+
+| parameter          | type    | defaults |
+| ------------------ | ------- | -------- |
+| distancePercentage | integer | 10       |
+
+#### Usage Example
+
+```javascript
+const t = detect({
+    distancePercentage: 10,
+});
+```
+
+</details>
+
+### 8. IntelligentCrop
+
+<details>
+<summary> 1. crop </summary>
+
+#### Supported Configuration
+
+| parameter              | type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | defaults |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| requiredWidth          | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
+| requiredHeight         | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
+| paddingPercentage      | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
+| maintainOriginalAspect | boolean                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | false    |
+| aspectRatio            | string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ``       |
+| gravityTowards         | enum : `object` , `foreground` , `face` , `none`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `none`   |
+| preferredDirection     | enum : `north_west` , `north` , `north_east` , `west` , `center` , `east` , `south_west` , `south` , `south_east`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `center` |
+| objectType             | enum : `airplane` , `apple` , `backpack` , `banana` , `baseball_bat` , `baseball_glove` , `bear` , `bed` , `bench` , `bicycle` , `bird` , `boat` , `book` , `bottle` , `bowl` , `broccoli` , `bus` , `cake` , `car` , `carrot` , `cat` , `cell_phone` , `chair` , `clock` , `couch` , `cow` , `cup` , `dining_table` , `dog` , `donut` , `elephant` , `fire_hydrant` , `fork` , `frisbee` , `giraffe` , `hair_drier` , `handbag` , `horse` , `hot_dog` , `keyboard` , `kite` , `knife` , `laptop` , `microwave` , `motorcycle` , `mouse` , `orange` , `oven` , `parking_meter` , `person` , `pizza` , `potted_plant` , `refrigerator` , `remote` , `sandwich` , `scissors` , `sheep` , `sink` , `skateboard` , `skis` , `snowboard` , `spoon` , `sports_ball` , `stop_sign` , `suitcase` , `surfboard` , `teddy_bear` , `tennis_racket` , `tie` , `toaster` , `toilet` , `toothbrush` , `traffic_light` , `train` , `truck` , `tv` , `umbrella` , `vase` , `wine_glass` , `zebra` | `person` |
+
+#### Usage Example
+
+```javascript
+const t = crop({
+    requiredWidth: 0,
+    requiredHeight: 0,
+    paddingPercentage: 0,
+    maintainOriginalAspect: false,
+    aspectRatio: "",
+    gravityTowards: "none",
+    preferredDirection: "center",
+    objectType: "person",
+});
+```
+
+</details>
+
+### 9. ObjectCounter
+
+<details>
+<summary> 1. detect </summary>
+
+#### Usage Example
+
+```javascript
+const t = detect({});
+```
+
+</details>
+
+### 10. NumberPlateDetection
+
+<details>
+<summary> 1. detect </summary>
+
+#### Usage Example
+
+```javascript
+const t = detect({});
+```
+
+</details>
+
+### 11. ObjectDetection
+
+<details>
+<summary> 1. detect </summary>
+
+#### Usage Example
+
+```javascript
+const t = detect({});
+```
+
+</details>
+
+### 12. CheckObjectSize
+
+<details>
+<summary> 1. detect </summary>
+
+#### Supported Configuration
+
+| parameter              | type    | defaults |
+| ---------------------- | ------- | -------- |
+| objectThresholdPercent | integer | 50       |
+
+#### Usage Example
+
+```javascript
+const t = detect({
+    objectThresholdPercent: 50,
+});
+```
+
+</details>
+
+### 13. TextDetectionandRecognition
+
+<details>
+<summary> 1. extract </summary>
+
+#### Supported Configuration
+
+| parameter  | type    | defaults |
+| ---------- | ------- | -------- |
+| detectOnly | boolean | false    |
+
+#### Usage Example
+
+```javascript
+const t = extract({
+    detectOnly: false,
+});
+```
+
+</details>
+
+### 14. PdfWatermarkRemoval
+
+<details>
+<summary> 1. remove </summary>
+
+#### Usage Example
+
+```javascript
+const t = remove({});
+```
+
+</details>
+
+### 15. ProductTagging
+
+<details>
+<summary> 1. tag </summary>
+
+#### Usage Example
+
+```javascript
+const t = tag({});
+```
+
+</details>
+
+### 16. CheckProductVisibility
+
+<details>
+<summary> 1. detect </summary>
+
+#### Usage Example
+
+```javascript
+const t = detect({});
+```
+
+</details>
+
+### 17. RemoveBG
+
+<details>
+<summary> 1. bg </summary>
+
+#### Usage Example
+
+```javascript
+const t = bg({});
+```
+
+</details>
+
+### 18. Basic
 
 <details>
 <summary> 1. resize </summary>
@@ -639,9 +1099,9 @@ const t = tint({
 
 #### Supported Configuration
 
-| parameter | type                           | defaults |
-| --------- | ------------------------------ | -------- |
-| format    | enum : `jpeg` , `png` , `webp` | `jpeg`   |
+| parameter | type                                                     | defaults |
+| --------- | -------------------------------------------------------- | -------- |
+| format    | enum : `jpeg` , `png` , `webp` , `tiff` , `avif` , `bmp` | `jpeg`   |
 
 #### Usage Example
 
@@ -681,7 +1141,7 @@ const t = density({
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | mode           | enum : `overlay` , `underlay` , `wrap`                                                                                                                                                                                                                                                                                 | `overlay`  |
 | image          | file                                                                                                                                                                                                                                                                                                                   | ``         |
-| transformation | string                                                                                                                                                                                                                                                                                                                 | ``         |
+| transformation | custom                                                                                                                                                                                                                                                                                                                 | ``         |
 | background     | color                                                                                                                                                                                                                                                                                                                  | `00000000` |
 | height         | integer                                                                                                                                                                                                                                                                                                                | 0          |
 | width          | integer                                                                                                                                                                                                                                                                                                                | 0          |
@@ -715,43 +1175,7 @@ const t = merge({
 
 </details>
 
-### 2. RemoveBG
-
-<details>
-<summary> 1. bg </summary>
-
-#### Usage Example
-
-```javascript
-const t = bg({});
-```
-
-</details>
-
-### 3. EraseBG
-
-<details>
-<summary> 1. bg </summary>
-
-#### Supported Configuration
-
-| parameter    | type                                   | defaults  |
-| ------------ | -------------------------------------- | --------- |
-| industryType | enum : `general` , `ecommerce` , `car` | `general` |
-| addShadow    | boolean                                | false     |
-
-#### Usage Example
-
-```javascript
-const t = bg({
-    industryType: "general",
-    addShadow: false,
-});
-```
-
-</details>
-
-### 4. SuperResolution
+### 19. SuperResolution
 
 <details>
 <summary> 1. upscale </summary>
@@ -774,20 +1198,20 @@ const t = upscale({
 
 </details>
 
-### 5. Artifact
+### 20. ViewDetection
 
 <details>
-<summary> 1. remove </summary>
+<summary> 1. detect </summary>
 
 #### Usage Example
 
 ```javascript
-const t = remove({});
+const t = detect({});
 ```
 
 </details>
 
-### 6. WatermarkRemoval
+### 21. WatermarkRemoval
 
 <details>
 <summary> 1. remove </summary>
@@ -820,70 +1244,7 @@ const t = remove({
 
 </details>
 
-### 7. AWSRekognitionPlugin
-
-<details>
-<summary> 1. detectLabels </summary>
-
-#### Supported Configuration
-
-| parameter         | type    | defaults |
-| ----------------- | ------- | -------- |
-| maximumLabels     | integer | 5        |
-| minimumConfidence | integer | 55       |
-
-#### Usage Example
-
-```javascript
-const t = detectLabels({
-    maximumLabels: 5,
-    minimumConfidence: 55,
-});
-```
-
-</details>
-
-<details>
-<summary> 2. moderation </summary>
-
-#### Supported Configuration
-
-| parameter         | type    | defaults |
-| ----------------- | ------- | -------- |
-| minimumConfidence | integer | 55       |
-
-#### Usage Example
-
-```javascript
-const t = moderation({
-    minimumConfidence: 55,
-});
-```
-
-</details>
-
-### 8. GoogleVisionPlugin
-
-<details>
-<summary> 1. detectLabels </summary>
-
-#### Supported Configuration
-
-| parameter     | type    | defaults |
-| ------------- | ------- | -------- |
-| maximumLabels | integer | 5        |
-
-#### Usage Example
-
-```javascript
-const t = detectLabels({
-    maximumLabels: 5,
-});
-```
-
-</details>
-
-### 9. WatermarkDetection
+### 22. WatermarkDetection
 
 <details>
 <summary> 1. detect </summary>
@@ -899,96 +1260,6 @@ const t = detectLabels({
 ```javascript
 const t = detect({
     detectText: false,
-});
-```
-
-</details>
-
-### 10. IntelligentCrop
-
-<details>
-<summary> 1. crop </summary>
-
-#### Supported Configuration
-
-| parameter              | type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | defaults |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| requiredWidth          | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
-| requiredHeight         | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
-| paddingPercentage      | integer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0        |
-| maintainOriginalAspect | boolean                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | false    |
-| aspectRatio            | string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ``       |
-| gravityTowards         | enum : `object` , `foreground` , `face` , `none`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `none`   |
-| preferredDirection     | enum : `north_west` , `north` , `north_east` , `west` , `center` , `east` , `south_west` , `south` , `south_east`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `center` |
-| objectType             | enum : `airplane` , `apple` , `backpack` , `banana` , `baseball_bat` , `baseball_glove` , `bear` , `bed` , `bench` , `bicycle` , `bird` , `boat` , `book` , `bottle` , `bowl` , `broccoli` , `bus` , `cake` , `car` , `carrot` , `cat` , `cell_phone` , `chair` , `clock` , `couch` , `cow` , `cup` , `dining_table` , `dog` , `donut` , `elephant` , `fire_hydrant` , `fork` , `frisbee` , `giraffe` , `hair_drier` , `handbag` , `horse` , `hot_dog` , `keyboard` , `kite` , `knife` , `laptop` , `microwave` , `motorcycle` , `mouse` , `orange` , `oven` , `parking_meter` , `person` , `pizza` , `potted_plant` , `refrigerator` , `remote` , `sandwich` , `scissors` , `sheep` , `sink` , `skateboard` , `skis` , `snowboard` , `spoon` , `sports_ball` , `stop_sign` , `suitcase` , `surfboard` , `teddy_bear` , `tennis_racket` , `tie` , `toaster` , `toilet` , `toothbrush` , `traffic_light` , `train` , `truck` , `tv` , `umbrella` , `vase` , `wine_glass` , `zebra` | `person` |
-
-#### Usage Example
-
-```javascript
-const t = crop({
-    requiredWidth: 0,
-    requiredHeight: 0,
-    paddingPercentage: 0,
-    maintainOriginalAspect: false,
-    aspectRatio: "",
-    gravityTowards: "none",
-    preferredDirection: "center",
-    objectType: "person",
-});
-```
-
-</details>
-
-### 11. TextDetectionandRecognition
-
-<details>
-<summary> 1. extract </summary>
-
-#### Supported Configuration
-
-| parameter  | type    | defaults |
-| ---------- | ------- | -------- |
-| detectOnly | boolean | false    |
-
-#### Usage Example
-
-```javascript
-const t = extract({
-    detectOnly: false,
-});
-```
-
-</details>
-
-### 12. NumberPlateDetection
-
-<details>
-<summary> 1. detect </summary>
-
-#### Usage Example
-
-```javascript
-const t = detect({});
-```
-
-</details>
-
-### 13. ImageCentering
-
-<details>
-<summary> 1. detect </summary>
-
-#### Supported Configuration
-
-| parameter          | type    | defaults |
-| ------------------ | ------- | -------- |
-| distancePercentage | integer | 10       |
-
-#### Usage Example
-
-```javascript
-const t = detect({
-    distancePercentage: 10,
 });
 ```
 

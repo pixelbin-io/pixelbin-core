@@ -1,14 +1,17 @@
-import axios from "axios";
+import fetchPonyfill from "fetch-ponyfill";
+const { fetch } = fetchPonyfill();
+import { default as FormData } from "form-data";
 
-async function signedUpload(url, form) {
-    return axios
-        .post(url, form)
-        .then((res) => {
-            Promise.resolve(res);
-        })
-        .catch((err) => {
-            return Promise.reject(err);
-        });
+async function postFormData(url, form) {
+    const res = await fetch(url, {
+        method: "POST",
+        body: form,
+    });
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+    return;
 }
 /**
  *
@@ -28,7 +31,7 @@ async function upload(file, signedDetails) {
         form.append(k, v);
     });
     form.append("file", file);
-    return signedUpload(url, form);
+    return await postFormData(url, form);
 }
 
 export { upload };

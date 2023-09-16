@@ -4,35 +4,53 @@ import * as errors from "./errors/PixelbinErrors";
 import { urlToObj, objToUrl } from "./utils";
 import { upload } from "./upload";
 
-import * as Basic from "./transformations/Basic";
-import * as RemoveBG from "./transformations/RemoveBG";
-import * as EraseBG from "./transformations/EraseBG";
-import * as SuperResolution from "./transformations/SuperResolution";
+import * as DetectBackgroundType from "./transformations/DetectBackgroundType";
 import * as Artifact from "./transformations/Artifact";
-import * as WatermarkRemoval from "./transformations/WatermarkRemoval";
 import * as AWSRekognitionPlugin from "./transformations/AWSRekognitionPlugin";
+import * as BackgroundGenerator from "./transformations/BackgroundGenerator";
+import * as EraseBG from "./transformations/EraseBG";
 import * as GoogleVisionPlugin from "./transformations/GoogleVisionPlugin";
-import * as WatermarkDetection from "./transformations/WatermarkDetection";
-import * as IntelligentCrop from "./transformations/IntelligentCrop";
-import * as TextDetectionandRecognition from "./transformations/TextDetectionandRecognition";
-import * as NumberPlateDetection from "./transformations/NumberPlateDetection";
 import * as ImageCentering from "./transformations/ImageCentering";
+import * as IntelligentCrop from "./transformations/IntelligentCrop";
+import * as ObjectCounter from "./transformations/ObjectCounter";
+import * as NumberPlateDetection from "./transformations/NumberPlateDetection";
+import * as ObjectDetection from "./transformations/ObjectDetection";
+import * as CheckObjectSize from "./transformations/CheckObjectSize";
+import * as TextDetectionandRecognition from "./transformations/TextDetectionandRecognition";
+import * as PdfWatermarkRemoval from "./transformations/PdfWatermarkRemoval";
+import * as ProductTagging from "./transformations/ProductTagging";
+import * as CheckProductVisibility from "./transformations/CheckProductVisibility";
+import * as RemoveBG from "./transformations/RemoveBG";
+import * as Basic from "./transformations/Basic";
+import * as SuperResolution from "./transformations/SuperResolution";
+import * as ViewDetection from "./transformations/ViewDetection";
+import * as WatermarkRemoval from "./transformations/WatermarkRemoval";
+import * as WatermarkDetection from "./transformations/WatermarkDetection";
 
 /**
  * @typedef {Object} transformations
- * @property {Basic} Basic - Basic Transformations
- * @property {RemoveBG} RemoveBG - Remove background from any image
- * @property {EraseBG} EraseBG - EraseBG Background Removal Module
- * @property {SuperResolution} SuperResolution - Super Resolution Module
+ * @property {DetectBackgroundType} DetectBackgroundType - Classifies the background of a product as plain, clean or busy
  * @property {Artifact} Artifact - Artifact Removal Plugin
- * @property {WatermarkRemoval} WatermarkRemoval - Watermark Removal Plugin
  * @property {AWSRekognitionPlugin} AWSRekognitionPlugin - Detect objects and text in images
+ * @property {BackgroundGenerator} BackgroundGenerator - AI Background Generator
+ * @property {EraseBG} EraseBG - EraseBG Background Removal Module
  * @property {GoogleVisionPlugin} GoogleVisionPlugin - Detect content and text in images
- * @property {WatermarkDetection} WatermarkDetection - Watermark Detection Plugin
- * @property {IntelligentCrop} IntelligentCrop - Intelligent Crop Plugin
- * @property {TextDetectionandRecognition} TextDetectionandRecognition - OCR Module
- * @property {NumberPlateDetection} NumberPlateDetection - Number Plate Detection Plugin
  * @property {ImageCentering} ImageCentering - Image Centering Module
+ * @property {IntelligentCrop} IntelligentCrop - Intelligent Crop Plugin
+ * @property {ObjectCounter} ObjectCounter - Classifies whether objects in the image are single or multiple
+ * @property {NumberPlateDetection} NumberPlateDetection - Number Plate Detection Plugin
+ * @property {ObjectDetection} ObjectDetection - Detect bounding boxes of objects in the image
+ * @property {CheckObjectSize} CheckObjectSize - Calculates the percentage of the main object area relative to image dimensions.
+ * @property {TextDetectionandRecognition} TextDetectionandRecognition - OCR Module
+ * @property {PdfWatermarkRemoval} PdfWatermarkRemoval - PDF Watermark Removal Plugin
+ * @property {ProductTagging} ProductTagging - AI Product Tagging
+ * @property {CheckProductVisibility} CheckProductVisibility - Classifies whether the product in the image is completely visible or not
+ * @property {RemoveBG} RemoveBG - Remove background from any image
+ * @property {Basic} Basic - Basic Transformations
+ * @property {SuperResolution} SuperResolution - Super Resolution Module
+ * @property {ViewDetection} ViewDetection - Classifies wear type and view type of products in the image
+ * @property {WatermarkRemoval} WatermarkRemoval - Watermark Removal Plugin
+ * @property {WatermarkDetection} WatermarkDetection - Watermark Detection Plugin
  */
 
 /**
@@ -48,12 +66,19 @@ class Pixelbin {
     }
 
     /**
+    * @typedef ImageOptions
+    * @type {object}
+    * @param {Boolean} worker - use url translation worker
+    * /
+    
+    /**
      * provides image on which transformation can be done.
      * @param {String} imageUri path of image.
+     * @param {ImageOptions} options options for image.
      * returns Image
      */
-    image(imageUri) {
-        return new Image(imageUri, this.cloudName, this.zone);
+    image(imageUri, options = {}) {
+        return new Image(imageUri, this.cloudName, this.zone, options.worker);
     }
 
     /**
@@ -79,19 +104,28 @@ class Pixelbin {
      * @returns {transformations}
      */
     static transformations = {
-        Basic,
-        RemoveBG,
-        EraseBG,
-        SuperResolution,
+        DetectBackgroundType,
         Artifact,
-        WatermarkRemoval,
         AWSRekognitionPlugin,
+        BackgroundGenerator,
+        EraseBG,
         GoogleVisionPlugin,
-        WatermarkDetection,
-        IntelligentCrop,
-        TextDetectionandRecognition,
-        NumberPlateDetection,
         ImageCentering,
+        IntelligentCrop,
+        ObjectCounter,
+        NumberPlateDetection,
+        ObjectDetection,
+        CheckObjectSize,
+        TextDetectionandRecognition,
+        PdfWatermarkRemoval,
+        ProductTagging,
+        CheckProductVisibility,
+        RemoveBG,
+        Basic,
+        SuperResolution,
+        ViewDetection,
+        WatermarkRemoval,
+        WatermarkDetection,
     };
 
     static Transformation = Transformation;
