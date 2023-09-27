@@ -2056,7 +2056,7 @@ describe("UrlUtils tests", () => {
                 options: {},
             };
             expect(obj).toEqual(expectedObj);
-            const generatedUrl = objToUrl(obj);
+            const generatedUrl = objToUrl({ ...obj, isCustomDomain: true });
             expect(generatedUrl).toBe(url);
         });
         it("obj to url then same url to obj - wrkr - 2", () => {

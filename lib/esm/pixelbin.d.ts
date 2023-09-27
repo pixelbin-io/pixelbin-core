@@ -36,6 +36,10 @@ export type transformations = {
      */
     ObjectCounter: typeof ObjectCounter;
     /**
+     * - Detect NSFW content in images
+     */
+    NSFWDetection: typeof NSFWDetection;
+    /**
      * - Number Plate Detection Plugin
      */
     NumberPlateDetection: typeof NumberPlateDetection;
@@ -99,6 +103,7 @@ export type transformations = {
  * @property {ImageCentering} ImageCentering - Image Centering Module
  * @property {IntelligentCrop} IntelligentCrop - Intelligent Crop Plugin
  * @property {ObjectCounter} ObjectCounter - Classifies whether objects in the image are single or multiple
+ * @property {NSFWDetection} NSFWDetection - Detect NSFW content in images
  * @property {NumberPlateDetection} NumberPlateDetection - Number Plate Detection Plugin
  * @property {ObjectDetection} ObjectDetection - Detect bounding boxes of objects in the image
  * @property {CheckObjectSize} CheckObjectSize - Calculates the percentage of the main object area relative to image dimensions.
@@ -148,6 +153,7 @@ declare class Pixelbin {
         ImageCentering: typeof ImageCentering;
         IntelligentCrop: typeof IntelligentCrop;
         ObjectCounter: typeof ObjectCounter;
+        NSFWDetection: typeof NSFWDetection;
         NumberPlateDetection: typeof NumberPlateDetection;
         ObjectDetection: typeof ObjectDetection;
         CheckObjectSize: typeof CheckObjectSize;
@@ -193,6 +199,7 @@ import * as GoogleVisionPlugin from "./transformations/GoogleVisionPlugin";
 import * as ImageCentering from "./transformations/ImageCentering";
 import * as IntelligentCrop from "./transformations/IntelligentCrop";
 import * as ObjectCounter from "./transformations/ObjectCounter";
+import * as NSFWDetection from "./transformations/NSFWDetection";
 import * as NumberPlateDetection from "./transformations/NumberPlateDetection";
 import * as ObjectDetection from "./transformations/ObjectDetection";
 import * as CheckObjectSize from "./transformations/CheckObjectSize";
@@ -216,6 +223,7 @@ export namespace transformations {
     export { ImageCentering };
     export { IntelligentCrop };
     export { ObjectCounter };
+    export { NSFWDetection };
     export { NumberPlateDetection };
     export { ObjectDetection };
     export { CheckObjectSize };
