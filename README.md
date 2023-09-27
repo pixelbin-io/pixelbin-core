@@ -64,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag
 
 ```html
-<script src="pixelbin.v5.0.0.js"></script>
+<script src="pixelbin.v5.1.0.js"></script>
 ```
 
 ```javascript
@@ -630,7 +630,28 @@ const t = detect({});
 
 </details>
 
-### 10. NumberPlateDetection
+### 10. NSFWDetection
+
+<details>
+<summary> 1. detect </summary>
+
+#### Supported Configuration
+
+| parameter         | type  | defaults |
+| ----------------- | ----- | -------- |
+| minimumConfidence | float | 0.5      |
+
+#### Usage Example
+
+```javascript
+const t = detect({
+    minimumConfidence: 0.5,
+});
+```
+
+</details>
+
+### 11. NumberPlateDetection
 
 <details>
 <summary> 1. detect </summary>
@@ -643,7 +664,7 @@ const t = detect({});
 
 </details>
 
-### 11. ObjectDetection
+### 12. ObjectDetection
 
 <details>
 <summary> 1. detect </summary>
@@ -656,7 +677,7 @@ const t = detect({});
 
 </details>
 
-### 12. CheckObjectSize
+### 13. CheckObjectSize
 
 <details>
 <summary> 1. detect </summary>
@@ -677,7 +698,7 @@ const t = detect({
 
 </details>
 
-### 13. TextDetectionandRecognition
+### 14. TextDetectionandRecognition
 
 <details>
 <summary> 1. extract </summary>
@@ -698,7 +719,7 @@ const t = extract({
 
 </details>
 
-### 14. PdfWatermarkRemoval
+### 15. PdfWatermarkRemoval
 
 <details>
 <summary> 1. remove </summary>
@@ -711,7 +732,7 @@ const t = remove({});
 
 </details>
 
-### 15. ProductTagging
+### 16. ProductTagging
 
 <details>
 <summary> 1. tag </summary>
@@ -724,7 +745,7 @@ const t = tag({});
 
 </details>
 
-### 16. CheckProductVisibility
+### 17. CheckProductVisibility
 
 <details>
 <summary> 1. detect </summary>
@@ -737,7 +758,7 @@ const t = detect({});
 
 </details>
 
-### 17. RemoveBG
+### 18. RemoveBG
 
 <details>
 <summary> 1. bg </summary>
@@ -750,7 +771,7 @@ const t = bg({});
 
 </details>
 
-### 18. Basic
+### 19. Basic
 
 <details>
 <summary> 1. resize </summary>
@@ -1175,7 +1196,7 @@ const t = merge({
 
 </details>
 
-### 19. SuperResolution
+### 20. SuperResolution
 
 <details>
 <summary> 1. upscale </summary>
@@ -1198,7 +1219,7 @@ const t = upscale({
 
 </details>
 
-### 20. ViewDetection
+### 21. ViewDetection
 
 <details>
 <summary> 1. detect </summary>
@@ -1211,7 +1232,7 @@ const t = detect({});
 
 </details>
 
-### 21. WatermarkRemoval
+### 22. WatermarkRemoval
 
 <details>
 <summary> 1. remove </summary>
@@ -1244,7 +1265,7 @@ const t = remove({
 
 </details>
 
-### 22. WatermarkDetection
+### 23. WatermarkDetection
 
 <details>
 <summary> 1. detect </summary>

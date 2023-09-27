@@ -1,3 +1,9 @@
+# 5.1.0
+
+-   Fixed custom domain support in `objToUrl`
+-   Added new plugins
+    -   `NSFW Detection` - Detect NSFW content in images.
+
 # 5.0.0
 
 -   Removed axios as a dependency

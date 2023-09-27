@@ -13,6 +13,7 @@ import * as GoogleVisionPlugin from "./transformations/GoogleVisionPlugin";
 import * as ImageCentering from "./transformations/ImageCentering";
 import * as IntelligentCrop from "./transformations/IntelligentCrop";
 import * as ObjectCounter from "./transformations/ObjectCounter";
+import * as NSFWDetection from "./transformations/NSFWDetection";
 import * as NumberPlateDetection from "./transformations/NumberPlateDetection";
 import * as ObjectDetection from "./transformations/ObjectDetection";
 import * as CheckObjectSize from "./transformations/CheckObjectSize";
@@ -38,6 +39,7 @@ import * as WatermarkDetection from "./transformations/WatermarkDetection";
  * @property {ImageCentering} ImageCentering - Image Centering Module
  * @property {IntelligentCrop} IntelligentCrop - Intelligent Crop Plugin
  * @property {ObjectCounter} ObjectCounter - Classifies whether objects in the image are single or multiple
+ * @property {NSFWDetection} NSFWDetection - Detect NSFW content in images
  * @property {NumberPlateDetection} NumberPlateDetection - Number Plate Detection Plugin
  * @property {ObjectDetection} ObjectDetection - Detect bounding boxes of objects in the image
  * @property {CheckObjectSize} CheckObjectSize - Calculates the percentage of the main object area relative to image dimensions.
@@ -113,6 +115,7 @@ class Pixelbin {
         ImageCentering,
         IntelligentCrop,
         ObjectCounter,
+        NSFWDetection,
         NumberPlateDetection,
         ObjectDetection,
         CheckObjectSize,
