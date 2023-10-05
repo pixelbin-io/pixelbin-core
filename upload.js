@@ -1,11 +1,29 @@
-import fetchPonyfill from "fetch-ponyfill";
-const { fetch } = fetchPonyfill();
 import { default as FormData } from "form-data";
+import httpUtils from "./utils/http.utils";
 
-async function postFormData(url, form) {
-    const res = await fetch(url, {
+async function uploadToS3(url, fields, file) {
+    const form = new FormData();
+    Object.entries(fields).forEach(([k, v]) => {
+        form.append(k, v);
+    });
+    form.append("file", file);
+
+    const res = await httpUtils.makeRequest(url, {
         method: "POST",
         body: form,
+    });
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+    return;
+}
+
+async function uploadToGCS(url, fields, file) {
+    const res = await httpUtils.makeRequest(url, {
+        method: "PUT",
+        body: file,
+        headers: fields,
     });
     if (!res.ok) {
         const error = await res.json();
@@ -26,12 +44,21 @@ async function upload(file, signedDetails) {
         return Promise.reject(
             new Error("Please provide the correct object. Refer upload api docs for details."),
         );
-    const form = new FormData();
-    Object.entries(fields).forEach(([k, v]) => {
-        form.append(k, v);
-    });
-    form.append("file", file);
-    return await postFormData(url, form);
+
+    const urlObj = new URL(url);
+    /**
+     * File storage has been moved to Google Cloud Storage.
+     * For backward compatibility, we will continue to support the both storages.
+     */
+
+    /**
+     * Not using an exact match here so we can change the url in the future.
+     */
+    if (urlObj.hostname.includes("storage.googleapis.com")) {
+        return await uploadToGCS(url, fields, file);
+    }
+
+    return await uploadToS3(url, fields, file);
 }
 
 export { upload };
