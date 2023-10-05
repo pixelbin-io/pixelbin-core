@@ -64,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag
 
 ```html
-<script src="pixelbin.v5.1.0.js"></script>
+<script src="pixelbin.v5.2.0.js"></script>
 ```
 
 ```javascript

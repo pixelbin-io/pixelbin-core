@@ -1,3 +1,7 @@
+# 5.2.0
+
+-   Added support for GCS signed URL uploads
+
 # 5.1.0
 
 -   Fixed custom domain support in `objToUrl`
