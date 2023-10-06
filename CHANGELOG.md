@@ -1,3 +1,7 @@
+# 5.2.1
+
+-   Fixed types for `customTransformation`
+
 # 5.2.0
 
 -   Added support for GCS signed URL uploads
