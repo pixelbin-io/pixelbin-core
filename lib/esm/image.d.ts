@@ -1,6 +1,6 @@
 export default Image;
 /**
- * class to create a Image object
+ * Class to create a Image object
  */
 declare class Image {
     /**
@@ -18,15 +18,14 @@ declare class Image {
     version: string;
     worker: boolean;
     /**
-     * Set transformation to be performed on Image.
-     * @param {Transformation} transformation Image transformation
-     * returns Image
+     * Set transformation to be performed on the Image.
+     * @param {import('./transformation.js').default} transformation - Image transformation.
+     * @returns {Image}
      */
-    setTransformation(transformation: Transformation): Image;
+    setTransformation(transformation: import('./transformation.js').default): Image;
     /**
-     * Get Transformation CDN link
-     * @param {Transformation} transformation Image transformation
-     * returns String
+     * Get Transformation CDN link.
+     * @returns {String}
      */
     getUrl(): string;
 }

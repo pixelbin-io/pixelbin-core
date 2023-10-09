@@ -1,5 +1,5 @@
 /**
- * class to create a Image object
+ * Class to create a Image object
  */
 class Image {
     /**
@@ -19,9 +19,9 @@ class Image {
     }
 
     /**
-     * Set transformation to be performed on Image.
-     * @param {Transformation} transformation Image transformation
-     * returns Image
+     * Set transformation to be performed on the Image.
+     * @param {import('./transformation.js').default} transformation - Image transformation.
+     * @returns {Image}
      */
     setTransformation(transformation) {
         this.transformation = transformation.getTransformation();
@@ -29,9 +29,8 @@ class Image {
     }
 
     /**
-     * Get Transformation CDN link
-     * @param {Transformation} transformation Image transformation
-     * returns String
+     * Get Transformation CDN link.
+     * @returns {String}
      */
     getUrl() {
         let operations = this.transformation.join("~").replace(/ /g, "") || "original";

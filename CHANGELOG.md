@@ -1,3 +1,7 @@
+# 5.2.2
+
+-   Fixed types for `Image` & `Transformation`
+
 # 5.2.1
 
 -   Fixed types for `customTransformation`

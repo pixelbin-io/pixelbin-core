@@ -64,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag
 
 ```html
-<script src="pixelbin.v5.2.1.js"></script>
+<script src="pixelbin.v5.2.2.js"></script>
 ```
 
 ```javascript
@@ -524,10 +524,10 @@ const t = bg({
 
 #### Supported Configuration
 
-| parameter    | type                                   | defaults  |
-| ------------ | -------------------------------------- | --------- |
-| industryType | enum : `general` , `ecommerce` , `car` | `general` |
-| addShadow    | boolean                                | false     |
+| parameter    | type                                             | defaults  |
+| ------------ | ------------------------------------------------ | --------- |
+| industryType | enum : `general` , `ecommerce` , `car` , `human` | `general` |
+| addShadow    | boolean                                          | false     |
 
 #### Usage Example
 
