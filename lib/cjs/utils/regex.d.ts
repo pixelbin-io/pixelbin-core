@@ -6,10 +6,10 @@ export namespace pixelbinDomainRegex {
     const urlWithWorker: RegExp;
 }
 export namespace customDomainRegex {
-    const urlWithoutZone_1: RegExp;
-    export { urlWithoutZone_1 as urlWithoutZone };
     const urlWithZone_1: RegExp;
     export { urlWithZone_1 as urlWithZone };
+    const urlWithoutZone_1: RegExp;
+    export { urlWithoutZone_1 as urlWithoutZone };
     const urlWithWorkerAndZone_1: RegExp;
     export { urlWithWorkerAndZone_1 as urlWithWorkerAndZone };
     const urlWithWorker_1: RegExp;

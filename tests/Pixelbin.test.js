@@ -105,7 +105,7 @@ describe("SDK tests", () => {
         t = t.pipe(SuperResolution.upscale());
         image.setTransformation(t);
         expect(image.getUrl()).toBe(
-            "https://cdn.pixelbin.io/v2/cloudname/t.resize(h:200,w:148)~t.extend(t:10,l:10,b:10,r:10,bc:000000,bt:constant,dpr:1)~sr.upscale(t:2x,enhance_face:false)/test-image.jpeg",
+            "https://cdn.pixelbin.io/v2/cloudname/t.resize(h:200,w:148)~t.extend(t:10,l:10,b:10,r:10,bc:000000,bt:constant,dpr:1)~sr.upscale(t:2x,enhance_face:false,model:Picasso,enhance_quality:false)/test-image.jpeg",
         );
     });
     it("should accept an image uri and fetch url for sharp resize => sharp extend => upscale 4x", async () => {
