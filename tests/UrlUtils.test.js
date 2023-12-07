@@ -1429,6 +1429,46 @@ describe("UrlUtils tests", () => {
                 }),
             ).toThrowError("Error Processing url. Please check the url is correct");
         });
+        it("should get obj from url - default zone url - 6 character length path segment", async () => {
+            const url =
+                "https://cdn.twist.vision/v2/original/z0/orgs/33/skills/icons/Fynd_Platform_Commerce_Extension.png";
+            const obj = urlToObj(url, {
+                isCustomDomain: true,
+            });
+            const expectedObj = {
+                transformations: [],
+                cloudName: undefined,
+                zone: undefined,
+                baseUrl: "https://cdn.twist.vision",
+                pattern: "original",
+                filePath: "z0/orgs/33/skills/icons/Fynd_Platform_Commerce_Extension.png",
+                version: "v2",
+                worker: false,
+                workerPath: "",
+                options: {},
+            };
+            expect(obj).toEqual(expectedObj);
+        });
+        it("should get obj from url - default zone url - path segment having 'wrkr'", async () => {
+            const url =
+                "https://cdn.twist.vision/v2/original/z0/orgs/33/wrkr/icons/Fynd_Platform_Commerce_Extension.png";
+            const obj = urlToObj(url, {
+                isCustomDomain: true,
+            });
+            const expectedObj = {
+                transformations: [],
+                cloudName: undefined,
+                zone: undefined,
+                baseUrl: "https://cdn.twist.vision",
+                pattern: "original",
+                filePath: "z0/orgs/33/wrkr/icons/Fynd_Platform_Commerce_Extension.png",
+                version: "v2",
+                worker: false,
+                workerPath: "",
+                options: {},
+            };
+            expect(obj).toEqual(expectedObj);
+        });
         it("should get obj from url - worker path - fullpath with depth 1", async () => {
             const url = "https://cdn.twist.vision/v2/wrkr/image.jpeg";
             const obj = urlToObj(url, {

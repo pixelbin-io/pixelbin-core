@@ -64,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag
 
 ```html
-<script src="pixelbin.v5.2.2.js"></script>
+<script src="pixelbin.v5.3.0.js"></script>
 ```
 
 ```javascript
@@ -1203,10 +1203,12 @@ const t = merge({
 
 #### Supported Configuration
 
-| parameter   | type               | defaults |
-| ----------- | ------------------ | -------- |
-| type        | enum : `2x` , `4x` | `2x`     |
-| enhanceFace | boolean            | false    |
+| parameter      | type                       | defaults  |
+| -------------- | -------------------------- | --------- |
+| type           | enum : `2x` , `4x`         | `2x`      |
+| enhanceFace    | boolean                    | false     |
+| model          | enum : `Picasso` , `Flash` | `Picasso` |
+| enhanceQuality | boolean                    | false     |
 
 #### Usage Example
 
@@ -1214,6 +1216,8 @@ const t = merge({
 const t = upscale({
     type: "2x",
     enhanceFace: false,
+    model: "Picasso",
+    enhanceQuality: false,
 });
 ```
 

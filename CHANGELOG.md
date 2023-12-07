@@ -1,3 +1,8 @@
+# 5.3.0
+
+-   Update SuperResolution Plugin
+-   Fixed regex for Custom Domain URLs
+
 # 5.2.2
 
 -   Fixed types for `Image` & `Transformation`
