@@ -1,3 +1,8 @@
+# 5.4.0
+
+-   Added support for V2 PixelBin Multipart signed URL uploads
+-   Update EraseBG plugin
+
 # 5.3.0
 
 -   Update SuperResolution Plugin

@@ -64,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag
 
 ```html
-<script src="pixelbin.v5.3.0.js"></script>
+<script src="pixelbin.v5.4.0.js"></script>
 ```
 
 ```javascript
@@ -94,10 +94,14 @@ The SDK provides a `upload` utility to upload images directly from the browser w
 
 ### upload(file, signedDetails):
 
-| parameter                                                            | type                                                                                                                                 |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin                                                                                                           |
-| signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin). |
+| parameter                                                            | type                                                                                                                                                      |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin                                                                                                                                |
+| signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin).                      |
+| options (Object)                                                     | Additional options for fine-tuning the upload process. Default: `{ chunkSize: 1 * 1024 * 1024, maxRetries: 2, concurrency: 3 }`                           |
+| chunkSize (Number)                                                   | Size of each chunk to upload. Default is 1 megabyte. Recommended chunk size for 3g network - upto 5kb, 4g network - 500kb to 1MB, 5g network - 1MB to 2MB |
+| maxRetries (Number)                                                  | Maximum number of retries if an upload fails. Default is 2 retries.                                                                                       |
+| concurrency (Number)                                                 | Number of concurrent chunk upload tasks. Default is 3 concurrent chunk uploads.                                                                           |
 
 **returns**: Promise
 
@@ -122,7 +126,11 @@ const fileInput = document.getElementById("fileInput");
 
 const handleFileInputEvent = function (e) {
     const file = e.target.files[0];
-    Pixelbin.upload(file, signedDetails)
+    Pixelbin.upload(file, signedDetails, {
+        chunkSize: 2 * 1024 * 1024,
+        maxRetries: 1,
+        concurrency: 2,
+    })
         .then(() => console.log("Uploaded Successfully"))
         .catch((err) => console.log("Error while uploading"));
 };
@@ -528,6 +536,7 @@ const t = bg({
 | ------------ | ------------------------------------------------ | --------- |
 | industryType | enum : `general` , `ecommerce` , `car` , `human` | `general` |
 | addShadow    | boolean                                          | false     |
+| refine       | boolean                                          | true      |
 
 #### Usage Example
 
@@ -535,6 +544,7 @@ const t = bg({
 const t = bg({
     industryType: "general",
     addShadow: false,
+    refine: true,
 });
 ```
 

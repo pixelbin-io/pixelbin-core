@@ -90,7 +90,7 @@ describe("SDK tests", () => {
         t = t.pipe(EraseBG.bg());
         image.setTransformation(t);
         expect(image.getUrl()).toBe(
-            "https://cdn.pixelbin.io/v2/cloudname/t.resize(h:200,w:148)~erase.bg(i:general,shadow:false)/test-image.jpeg",
+            "https://cdn.pixelbin.io/v2/cloudname/t.resize(h:200,w:148)~erase.bg(i:general,shadow:false,r:true)/test-image.jpeg",
         );
     });
     it("should accept an image uri and fetch url for sharp resize => sharp extend => upscale", async () => {

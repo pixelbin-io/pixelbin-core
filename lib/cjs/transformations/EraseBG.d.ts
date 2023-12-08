@@ -1,6 +1,7 @@
 export function bg(config?: {
     industryType: string;
     addShadow: boolean;
+    refine: boolean;
 }): Transformation;
 declare namespace _default {
     export { bg };
