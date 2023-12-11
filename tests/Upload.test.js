@@ -38,4 +38,36 @@ describe("SDK tests", () => {
             body: expect.any(FormData),
         });
     });
+
+    it("should upload using multipart upload if pixelbin signedUrl", async () => {
+        const spy = jest.fn().mockResolvedValue({ ok: true });
+        jest.spyOn(httpUtils, "makeRequest").mockImplementation(spy);
+
+        // it will be a file in browser/react usage
+        const res = await Pixelbin.upload(Buffer.from("hello"), {
+            url: "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart",
+            fields: { key: "value" },
+        });
+        expect(spy).toHaveBeenCalledWith(
+            "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?partNumber=1",
+            {
+                method: "PUT",
+                body: expect.any(FormData),
+            },
+        );
+        expect(spy).toHaveBeenCalledWith(
+            "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart",
+            {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    parts: [1],
+                    key: "value",
+                }),
+            },
+        );
+    });
 });

@@ -95,10 +95,14 @@ class Pixelbin {
      *
      * @param {File} file
      * @param {Object} signedDetails generated with @pixelbin/core sdk
+     * @param {Object} options
+     * @param {Number} options.chunkSize default 1MB
+     * @param {Number} options.maxRetries default 2
+     * @param {Number} options.concurrency default 3
      * @returns Promise
      */
-    static async upload(file, signedDetails) {
-        return upload(file, signedDetails);
+    static async upload(file, signedDetails, options) {
+        return upload(file, signedDetails, options);
     }
 
     /**
