@@ -72,6 +72,7 @@ async function multipartUploadToPixelBin(url, fields, file, options) {
                 res = await httpUtils.makeRequest(chunk.url, {
                     method: "PUT",
                     body: chunk.form,
+                    signal: options.signal,
                 });
                 if (!res.ok) {
                     const error = await res.json();
@@ -103,6 +104,7 @@ async function multipartUploadToPixelBin(url, fields, file, options) {
                 parts: fileChunks.map((chunk) => chunk.partNumber),
                 ...fields,
             }),
+            signal: options.signal,
         });
         if (!res.ok) {
             const error = await res.json();

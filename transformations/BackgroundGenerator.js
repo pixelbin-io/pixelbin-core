@@ -9,7 +9,7 @@ import { processParams } from "../utils/transformation.utils.js";
 export const bg = function (
     config = {
         backgroundPrompt:
-            "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw",
+            "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
         backgroundImageForShadow: "",
         focus: "Product",
         negativePrompt: "",

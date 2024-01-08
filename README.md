@@ -64,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag
 
 ```html
-<script src="pixelbin.v5.4.0.js"></script>
+<script src="pixelbin.v5.5.0.js"></script>
 ```
 
 ```javascript
@@ -502,20 +502,20 @@ const t = moderation({
 
 #### Supported Configuration
 
-| parameter                | type                            | defaults                                                                                         |
-| ------------------------ | ------------------------------- | ------------------------------------------------------------------------------------------------ |
-| backgroundPrompt         | custom                          | `cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw` |
-| backgroundImageForShadow | file                            | ``                                                                                               |
-| focus                    | enum : `Product` , `Background` | `Product`                                                                                        |
-| negativePrompt           | custom                          | ``                                                                                               |
-| seed                     | integer                         | 123                                                                                              |
+| parameter                | type                            | defaults                                                                                                                   |
+| ------------------------ | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| backgroundPrompt         | custom                          | `YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr` |
+| backgroundImageForShadow | file                            | ``                                                                                                                         |
+| focus                    | enum : `Product` , `Background` | `Product`                                                                                                                  |
+| negativePrompt           | custom                          | ``                                                                                                                         |
+| seed                     | integer                         | 123                                                                                                                        |
 
 #### Usage Example
 
 ```javascript
 const t = bg({
     backgroundPrompt:
-        "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw",
+        "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
     backgroundImageForShadow: "",
     focus: "Product",
     negativePrompt: "",
