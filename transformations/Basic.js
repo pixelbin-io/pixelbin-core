@@ -106,7 +106,7 @@ export const extend = function (
 
 /**
  * Basic Transformations
- * @param {integer} top - Top* @param {integer} left - Left* @param {integer} height - Height* @param {integer} width - Width
+ * @param {integer} top - Top* @param {integer} left - Left* @param {integer} height - Height* @param {integer} width - Width* @param {bbox} boundingBox - Bounding box
  * returns Transformation
  */
 export const extract = function (
@@ -115,6 +115,7 @@ export const extract = function (
         left: 10,
         height: 50,
         width: 20,
+        boundingBox: null,
     },
 ) {
     const paramIdMap = {
@@ -122,8 +123,9 @@ export const extract = function (
         left: "l",
         height: "h",
         width: "w",
+        boundingBox: "bbox",
     };
-    const params = ["top", "left", "height", "width"].filter((param) =>
+    const params = ["top", "left", "height", "width", "boundingBox"].filter((param) =>
         config.hasOwnProperty(param),
     );
     const transformation = ["t.extract", "("];
@@ -471,18 +473,20 @@ export const tint = function (
 
 /**
  * Basic Transformations
- * @param {enum} format - Format
+ * @param {enum} format - Format* @param {integer} quality - Quality
  * returns Transformation
  */
 export const toFormat = function (
     config = {
         format: "jpeg",
+        quality: 75,
     },
 ) {
     const paramIdMap = {
         format: "f",
+        quality: "q",
     };
-    const params = ["format"].filter((param) => config.hasOwnProperty(param));
+    const params = ["format", "quality"].filter((param) => config.hasOwnProperty(param));
     const transformation = ["t.toFormat", "("];
     params.map((param, idx) => {
         processParams(config, params, transformation, paramIdMap, param, idx);

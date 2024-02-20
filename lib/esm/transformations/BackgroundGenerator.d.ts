@@ -1,6 +1,6 @@
 export function bg(config?: {
     backgroundPrompt: string;
-    backgroundImageForShadow: string;
+    backgroundImage: string;
     focus: string;
     negativePrompt: string;
     seed: number;
