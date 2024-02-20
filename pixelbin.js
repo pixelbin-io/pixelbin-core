@@ -21,8 +21,8 @@ import * as TextDetectionandRecognition from "./transformations/TextDetectionand
 import * as PdfWatermarkRemoval from "./transformations/PdfWatermarkRemoval";
 import * as ProductTagging from "./transformations/ProductTagging";
 import * as CheckProductVisibility from "./transformations/CheckProductVisibility";
-import * as RemoveBG from "./transformations/RemoveBG";
 import * as Basic from "./transformations/Basic";
+import * as SoftShadowGenerator from "./transformations/SoftShadowGenerator";
 import * as SuperResolution from "./transformations/SuperResolution";
 import * as ViewDetection from "./transformations/ViewDetection";
 import * as WatermarkRemoval from "./transformations/WatermarkRemoval";
@@ -47,8 +47,8 @@ import * as WatermarkDetection from "./transformations/WatermarkDetection";
  * @property {PdfWatermarkRemoval} PdfWatermarkRemoval - PDF Watermark Removal Plugin
  * @property {ProductTagging} ProductTagging - AI Product Tagging
  * @property {CheckProductVisibility} CheckProductVisibility - Classifies whether the product in the image is completely visible or not
- * @property {RemoveBG} RemoveBG - Remove background from any image
  * @property {Basic} Basic - Basic Transformations
+ * @property {SoftShadowGenerator} SoftShadowGenerator - AI Soft Shadow Generator
  * @property {SuperResolution} SuperResolution - Super Resolution Module
  * @property {ViewDetection} ViewDetection - Classifies wear type and view type of products in the image
  * @property {WatermarkRemoval} WatermarkRemoval - Watermark Removal Plugin
@@ -127,8 +127,8 @@ class Pixelbin {
         PdfWatermarkRemoval,
         ProductTagging,
         CheckProductVisibility,
-        RemoveBG,
         Basic,
+        SoftShadowGenerator,
         SuperResolution,
         ViewDetection,
         WatermarkRemoval,

@@ -1,3 +1,10 @@
+# 6.0.0
+
+-   Added new plugins
+    -   `SoftShadowGenerator` - AI Soft Shadow Generator
+-   Transformations are updated to their latest API
+-   Removed RemoveBG transformation
+
 # 5.4.0
 
 -   Added support for V2 PixelBin Multipart signed URL uploads
