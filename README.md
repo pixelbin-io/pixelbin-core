@@ -64,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag
 
 ```html
-<script src="pixelbin.v5.4.0.js"></script>
+<script src="pixelbin.v6.0.0.js"></script>
 ```
 
 ```javascript
@@ -97,7 +97,7 @@ The SDK provides a `upload` utility to upload images directly from the browser w
 | parameter                                                            | type                                                                                                                                                      |
 | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | file ([File](https://developer.mozilla.org/en-US/docs/Web/API/File)) | File to upload to Pixelbin                                                                                                                                |
-| signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-io/pixelbin-js-admin).                      |
+| signedDetails (Object)                                               | `signedDetails` can be generated with the Pixelbin Backend SDK [@pixelbin/admin](https://github.com/pixelbin-dev/pixelbin-js-admin).                      |
 | options (Object)                                                     | Additional options for fine-tuning the upload process. Default: `{ chunkSize: 1 * 1024 * 1024, maxRetries: 2, concurrency: 3 }`                           |
 | chunkSize (Number)                                                   | Size of each chunk to upload. Default is 1 megabyte. Recommended chunk size for 3g network - upto 5kb, 4g network - 500kb to 1MB, 5g network - 1MB to 2MB |
 | maxRetries (Number)                                                  | Maximum number of retries if an upload fails. Default is 2 retries.                                                                                       |
@@ -116,7 +116,7 @@ Example :
 <input type="file" id="fileInput" />
 ```
 
-2. Generate the presignedUrl with the backend sdk. [click here](https://github.com/pixelbin-io/pixelbin-js-admin/blob/main/documentation/platform/ASSETS.md#createsignedurl).
+2. Generate the presignedUrl with the backend sdk. [click here](https://github.com/pixelbin-dev/pixelbin-js-admin/blob/main/documentation/platform/ASSETS.md#createsignedurl).
 
 3. Use the response object as is with the upload api as shown below.
 
@@ -502,21 +502,21 @@ const t = moderation({
 
 #### Supported Configuration
 
-| parameter                | type                            | defaults                                                                                         |
-| ------------------------ | ------------------------------- | ------------------------------------------------------------------------------------------------ |
-| backgroundPrompt         | custom                          | `cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw` |
-| backgroundImageForShadow | file                            | ``                                                                                               |
-| focus                    | enum : `Product` , `Background` | `Product`                                                                                        |
-| negativePrompt           | custom                          | ``                                                                                               |
-| seed                     | integer                         | 123                                                                                              |
+| parameter        | type                            | defaults                                                                                                                   |
+| ---------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| backgroundPrompt | custom                          | `YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr` |
+| backgroundImage  | file                            | ``                                                                                                                         |
+| focus            | enum : `Product` , `Background` | `Product`                                                                                                                  |
+| negativePrompt   | custom                          | ``                                                                                                                         |
+| seed             | integer                         | 123                                                                                                                        |
 
 #### Usage Example
 
 ```javascript
 const t = bg({
     backgroundPrompt:
-        "cmVhbGlzdGljIGdyZWVuIGdyYXNzLCBsYXduIGZpZWxkIG9mIGdyYXNzLCBibHVlIHNreSB3aXRoIHdoaXRlIGNsb3Vkcw",
-    backgroundImageForShadow: "",
+        "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
+    backgroundImage: "",
     focus: "Product",
     negativePrompt: "",
     seed: 123,
@@ -768,20 +768,7 @@ const t = detect({});
 
 </details>
 
-### 18. RemoveBG
-
-<details>
-<summary> 1. bg </summary>
-
-#### Usage Example
-
-```javascript
-const t = bg({});
-```
-
-</details>
-
-### 19. Basic
+### 18. Basic
 
 <details>
 <summary> 1. resize </summary>
@@ -869,12 +856,13 @@ const t = extend({
 
 #### Supported Configuration
 
-| parameter | type    | defaults |
-| --------- | ------- | -------- |
-| top       | integer | 10       |
-| left      | integer | 10       |
-| height    | integer | 50       |
-| width     | integer | 20       |
+| parameter   | type    | defaults |
+| ----------- | ------- | -------- |
+| top         | integer | 10       |
+| left        | integer | 10       |
+| height      | integer | 50       |
+| width       | integer | 20       |
+| boundingBox | bbox    |          |
 
 #### Usage Example
 
@@ -884,6 +872,7 @@ const t = extract({
     left: 10,
     height: 50,
     width: 20,
+    boundingBox: null,
 });
 ```
 
@@ -1130,15 +1119,17 @@ const t = tint({
 
 #### Supported Configuration
 
-| parameter | type                                                     | defaults |
-| --------- | -------------------------------------------------------- | -------- |
-| format    | enum : `jpeg` , `png` , `webp` , `tiff` , `avif` , `bmp` | `jpeg`   |
+| parameter | type                                                              | defaults |
+| --------- | ----------------------------------------------------------------- | -------- |
+| format    | enum : `jpeg` , `png` , `webp` , `tiff` , `avif` , `bmp` , `heif` | `jpeg`   |
+| quality   | integer                                                           | 75       |
 
 #### Usage Example
 
 ```javascript
 const t = toFormat({
     format: "jpeg",
+    quality: 75,
 });
 ```
 
@@ -1201,6 +1192,33 @@ const t = merge({
     tile: false,
     listOfBboxes: null,
     listOfPolygons: null,
+});
+```
+
+</details>
+
+### 19. SoftShadowGenerator
+
+<details>
+<summary> 1. gen </summary>
+
+#### Supported Configuration
+
+| parameter       | type  | defaults |
+| --------------- | ----- | -------- |
+| backgroundImage | file  |          |
+| backgroundColor | color | `ffffff` |
+| shadowAngle     | float | 120      |
+| shadowIntensity | float | 0.5      |
+
+#### Usage Example
+
+```javascript
+const t = gen({
+    backgroundImage: null,
+    backgroundColor: "ffffff",
+    shadowAngle: 120,
+    shadowIntensity: 0.5,
 });
 ```
 

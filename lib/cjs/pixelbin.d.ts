@@ -68,13 +68,13 @@ export type transformations = {
      */
     CheckProductVisibility: typeof CheckProductVisibility;
     /**
-     * - Remove background from any image
-     */
-    RemoveBG: typeof RemoveBG;
-    /**
      * - Basic Transformations
      */
     Basic: typeof Basic;
+    /**
+     * - AI Soft Shadow Generator
+     */
+    SoftShadowGenerator: typeof SoftShadowGenerator;
     /**
      * - Super Resolution Module
      */
@@ -111,8 +111,8 @@ export type transformations = {
  * @property {PdfWatermarkRemoval} PdfWatermarkRemoval - PDF Watermark Removal Plugin
  * @property {ProductTagging} ProductTagging - AI Product Tagging
  * @property {CheckProductVisibility} CheckProductVisibility - Classifies whether the product in the image is completely visible or not
- * @property {RemoveBG} RemoveBG - Remove background from any image
  * @property {Basic} Basic - Basic Transformations
+ * @property {SoftShadowGenerator} SoftShadowGenerator - AI Soft Shadow Generator
  * @property {SuperResolution} SuperResolution - Super Resolution Module
  * @property {ViewDetection} ViewDetection - Classifies wear type and view type of products in the image
  * @property {WatermarkRemoval} WatermarkRemoval - Watermark Removal Plugin
@@ -169,8 +169,8 @@ declare class Pixelbin {
         PdfWatermarkRemoval: typeof PdfWatermarkRemoval;
         ProductTagging: typeof ProductTagging;
         CheckProductVisibility: typeof CheckProductVisibility;
-        RemoveBG: typeof RemoveBG;
         Basic: typeof Basic;
+        SoftShadowGenerator: typeof SoftShadowGenerator;
         SuperResolution: typeof SuperResolution;
         ViewDetection: typeof ViewDetection;
         WatermarkRemoval: typeof WatermarkRemoval;
@@ -215,8 +215,8 @@ import * as TextDetectionandRecognition from "./transformations/TextDetectionand
 import * as PdfWatermarkRemoval from "./transformations/PdfWatermarkRemoval";
 import * as ProductTagging from "./transformations/ProductTagging";
 import * as CheckProductVisibility from "./transformations/CheckProductVisibility";
-import * as RemoveBG from "./transformations/RemoveBG";
 import * as Basic from "./transformations/Basic";
+import * as SoftShadowGenerator from "./transformations/SoftShadowGenerator";
 import * as SuperResolution from "./transformations/SuperResolution";
 import * as ViewDetection from "./transformations/ViewDetection";
 import * as WatermarkRemoval from "./transformations/WatermarkRemoval";
@@ -239,8 +239,8 @@ export namespace transformations {
     export { PdfWatermarkRemoval };
     export { ProductTagging };
     export { CheckProductVisibility };
-    export { RemoveBG };
     export { Basic };
+    export { SoftShadowGenerator };
     export { SuperResolution };
     export { ViewDetection };
     export { WatermarkRemoval };

@@ -24,6 +24,7 @@ export function extract(config?: {
     left: number;
     height: number;
     width: number;
+    boundingBox: any;
 }): Transformation;
 export function trim(config?: {
     threshold: number;
@@ -64,6 +65,7 @@ export function tint(config?: {
 }): Transformation;
 export function toFormat(config?: {
     format: string;
+    quality: number;
 }): Transformation;
 export function density(config?: {
     density: number;
