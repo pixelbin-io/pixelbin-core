@@ -16,6 +16,10 @@ export type transformations = {
      */
     BackgroundGenerator: typeof BackgroundGenerator;
     /**
+     * - AI Variation Generator
+     */
+    VariationGenerator: typeof VariationGenerator;
+    /**
      * - EraseBG Background Removal Module
      */
     EraseBG: typeof EraseBG;
@@ -80,6 +84,10 @@ export type transformations = {
      */
     SuperResolution: typeof SuperResolution;
     /**
+     * - Video Watermark Removal Plugin
+     */
+    VideoWatermarkRemoval: typeof VideoWatermarkRemoval;
+    /**
      * - Classifies wear type and view type of products in the image
      */
     ViewDetection: typeof ViewDetection;
@@ -98,6 +106,7 @@ export type transformations = {
  * @property {Artifact} Artifact - Artifact Removal Plugin
  * @property {AWSRekognitionPlugin} AWSRekognitionPlugin - Detect objects and text in images
  * @property {BackgroundGenerator} BackgroundGenerator - AI Background Generator
+ * @property {VariationGenerator} VariationGenerator - AI Variation Generator
  * @property {EraseBG} EraseBG - EraseBG Background Removal Module
  * @property {GoogleVisionPlugin} GoogleVisionPlugin - Detect content and text in images
  * @property {ImageCentering} ImageCentering - Image Centering Module
@@ -114,6 +123,7 @@ export type transformations = {
  * @property {Basic} Basic - Basic Transformations
  * @property {SoftShadowGenerator} SoftShadowGenerator - AI Soft Shadow Generator
  * @property {SuperResolution} SuperResolution - Super Resolution Module
+ * @property {VideoWatermarkRemoval} VideoWatermarkRemoval - Video Watermark Removal Plugin
  * @property {ViewDetection} ViewDetection - Classifies wear type and view type of products in the image
  * @property {WatermarkRemoval} WatermarkRemoval - Watermark Removal Plugin
  * @property {WatermarkDetection} WatermarkDetection - Watermark Detection Plugin
@@ -146,7 +156,7 @@ declare class Pixelbin {
         chunkSize: number;
         maxRetries: number;
         concurrency: number;
-    }): Promise<void>;
+    }): Promise<any>;
     /**
      * provides access to pixelbin transformations
      * @returns {transformations}
@@ -156,6 +166,7 @@ declare class Pixelbin {
         Artifact: typeof Artifact;
         AWSRekognitionPlugin: typeof AWSRekognitionPlugin;
         BackgroundGenerator: typeof BackgroundGenerator;
+        VariationGenerator: typeof VariationGenerator;
         EraseBG: typeof EraseBG;
         GoogleVisionPlugin: typeof GoogleVisionPlugin;
         ImageCentering: typeof ImageCentering;
@@ -172,6 +183,7 @@ declare class Pixelbin {
         Basic: typeof Basic;
         SoftShadowGenerator: typeof SoftShadowGenerator;
         SuperResolution: typeof SuperResolution;
+        VideoWatermarkRemoval: typeof VideoWatermarkRemoval;
         ViewDetection: typeof ViewDetection;
         WatermarkRemoval: typeof WatermarkRemoval;
         WatermarkDetection: typeof WatermarkDetection;
@@ -202,6 +214,7 @@ import * as DetectBackgroundType from "./transformations/DetectBackgroundType";
 import * as Artifact from "./transformations/Artifact";
 import * as AWSRekognitionPlugin from "./transformations/AWSRekognitionPlugin";
 import * as BackgroundGenerator from "./transformations/BackgroundGenerator";
+import * as VariationGenerator from "./transformations/VariationGenerator";
 import * as EraseBG from "./transformations/EraseBG";
 import * as GoogleVisionPlugin from "./transformations/GoogleVisionPlugin";
 import * as ImageCentering from "./transformations/ImageCentering";
@@ -218,6 +231,7 @@ import * as CheckProductVisibility from "./transformations/CheckProductVisibilit
 import * as Basic from "./transformations/Basic";
 import * as SoftShadowGenerator from "./transformations/SoftShadowGenerator";
 import * as SuperResolution from "./transformations/SuperResolution";
+import * as VideoWatermarkRemoval from "./transformations/VideoWatermarkRemoval";
 import * as ViewDetection from "./transformations/ViewDetection";
 import * as WatermarkRemoval from "./transformations/WatermarkRemoval";
 import * as WatermarkDetection from "./transformations/WatermarkDetection";
@@ -226,6 +240,7 @@ export namespace transformations {
     export { Artifact };
     export { AWSRekognitionPlugin };
     export { BackgroundGenerator };
+    export { VariationGenerator };
     export { EraseBG };
     export { GoogleVisionPlugin };
     export { ImageCentering };
@@ -242,6 +257,7 @@ export namespace transformations {
     export { Basic };
     export { SoftShadowGenerator };
     export { SuperResolution };
+    export { VideoWatermarkRemoval };
     export { ViewDetection };
     export { WatermarkRemoval };
     export { WatermarkDetection };

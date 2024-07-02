@@ -66,7 +66,7 @@ async function multipartUploadToPixelBin(url, fields, file, options) {
         };
 
         let res;
-        while (retries < maxRetries) {
+        while (retries <= maxRetries) {
             try {
                 let chunk = prepareChunk();
                 res = await httpUtils.makeRequest(chunk.url, {
@@ -108,6 +108,7 @@ async function multipartUploadToPixelBin(url, fields, file, options) {
             const error = await res.json();
             throw error;
         }
+        return res.json();
     };
 
     const createChunks = (file, chunkSize) => {
@@ -140,24 +141,22 @@ async function multipartUploadToPixelBin(url, fields, file, options) {
         return await uploadChunk(url, fields, chunk.chunk, chunk.partNumber, maxRetries);
     });
 
-    await completeMultipartUpload(url, fields);
-
-    return;
+    return completeMultipartUpload(url, fields);
 }
 
 /**
  *
- * @param {File} file
- * @param {Object} signedDetails generated with @pixelbin/core sdk
- * @param {Object} options
- * @param {Number} options.chunkSize default 1MB
- * @param {Number} options.maxRetries default 2
- * @param {Number} options.concurrency default 3
- * @returns Promise
+ * @param {File} file - The file to be uploaded.
+ * @param {Object} signedDetails - The signed details generated when initiating signed url upload
+ * @param {Object} [options] - The upload options.
+ * @param {Number} [options.chunkSize=1048576] - The chunk size in bytes. Default is 1MB.
+ * @param {Number} [options.maxRetries=2] - The maximum number of retries. Default is 2.
+ * @param {Number} [options.concurrency=3] - The number of concurrent uploads. Default is 3.
+ * @returns {Promise<void|Object>} - Returns the file metadata if you are using v2 signed url
  */
 async function upload(file, signedDetails, options = {}) {
     if (!options.chunkSize) options.chunkSize = 1 * 1024 * 1024; // 1MB
-    if (!options.maxRetries) options.maxRetries = 2;
+    if (options.maxRetries == undefined) options.maxRetries = 2;
     if (!options.concurrency) options.concurrency = 3;
 
     // get presigned POST Url for upload

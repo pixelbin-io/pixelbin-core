@@ -40,13 +40,24 @@ describe("SDK tests", () => {
     });
 
     it("should upload using multipart upload if pixelbin signedUrl", async () => {
-        const spy = jest.fn().mockResolvedValue({ ok: true });
+        const spy = jest.fn().mockResolvedValue({
+            ok: true,
+            json: async () => {
+                return {
+                    data: "data",
+                };
+            },
+        });
         jest.spyOn(httpUtils, "makeRequest").mockImplementation(spy);
 
         // it will be a file in browser/react usage
         const res = await Pixelbin.upload(Buffer.from("hello"), {
             url: "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart",
             fields: { key: "value" },
+        });
+
+        expect(res).toEqual({
+            data: "data",
         });
         expect(spy).toHaveBeenCalledWith(
             "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?partNumber=1",
