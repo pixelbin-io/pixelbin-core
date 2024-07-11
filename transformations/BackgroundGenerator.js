@@ -3,14 +3,13 @@ import { processParams } from "../utils/transformation.utils.js";
 
 /**
  * AI Background Generator
- * @param {custom} backgroundPrompt - Background prompt* @param {file} backgroundImage - Background image* @param {enum} focus - Focus* @param {custom} negativePrompt - Negative prompt* @param {integer} seed - Seed
+ * @param {custom} backgroundPrompt - Background prompt* @param {enum} focus - Focus* @param {custom} negativePrompt - Negative prompt* @param {integer} seed - Seed
  * returns Transformation
  */
 export const bg = function (
     config = {
         backgroundPrompt:
             "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
-        backgroundImage: "",
         focus: "Product",
         negativePrompt: "",
         seed: 123,
@@ -18,18 +17,13 @@ export const bg = function (
 ) {
     const paramIdMap = {
         backgroundPrompt: "p",
-        backgroundImage: "i",
         focus: "f",
         negativePrompt: "np",
         seed: "s",
     };
-    const params = [
-        "backgroundPrompt",
-        "backgroundImage",
-        "focus",
-        "negativePrompt",
-        "seed",
-    ].filter((param) => config.hasOwnProperty(param));
+    const params = ["backgroundPrompt", "focus", "negativePrompt", "seed"].filter((param) =>
+        config.hasOwnProperty(param),
+    );
     const transformation = ["generate.bg", "("];
     params.map((param, idx) => {
         processParams(config, params, transformation, paramIdMap, param, idx);

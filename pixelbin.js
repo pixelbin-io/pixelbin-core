@@ -8,6 +8,7 @@ import * as DetectBackgroundType from "./transformations/DetectBackgroundType";
 import * as Artifact from "./transformations/Artifact";
 import * as AWSRekognitionPlugin from "./transformations/AWSRekognitionPlugin";
 import * as BackgroundGenerator from "./transformations/BackgroundGenerator";
+import * as VariationGenerator from "./transformations/VariationGenerator";
 import * as EraseBG from "./transformations/EraseBG";
 import * as GoogleVisionPlugin from "./transformations/GoogleVisionPlugin";
 import * as ImageCentering from "./transformations/ImageCentering";
@@ -24,6 +25,7 @@ import * as CheckProductVisibility from "./transformations/CheckProductVisibilit
 import * as Basic from "./transformations/Basic";
 import * as SoftShadowGenerator from "./transformations/SoftShadowGenerator";
 import * as SuperResolution from "./transformations/SuperResolution";
+import * as VideoWatermarkRemoval from "./transformations/VideoWatermarkRemoval";
 import * as ViewDetection from "./transformations/ViewDetection";
 import * as WatermarkRemoval from "./transformations/WatermarkRemoval";
 import * as WatermarkDetection from "./transformations/WatermarkDetection";
@@ -34,6 +36,7 @@ import * as WatermarkDetection from "./transformations/WatermarkDetection";
  * @property {Artifact} Artifact - Artifact Removal Plugin
  * @property {AWSRekognitionPlugin} AWSRekognitionPlugin - Detect objects and text in images
  * @property {BackgroundGenerator} BackgroundGenerator - AI Background Generator
+ * @property {VariationGenerator} VariationGenerator - AI Variation Generator
  * @property {EraseBG} EraseBG - EraseBG Background Removal Module
  * @property {GoogleVisionPlugin} GoogleVisionPlugin - Detect content and text in images
  * @property {ImageCentering} ImageCentering - Image Centering Module
@@ -50,6 +53,7 @@ import * as WatermarkDetection from "./transformations/WatermarkDetection";
  * @property {Basic} Basic - Basic Transformations
  * @property {SoftShadowGenerator} SoftShadowGenerator - AI Soft Shadow Generator
  * @property {SuperResolution} SuperResolution - Super Resolution Module
+ * @property {VideoWatermarkRemoval} VideoWatermarkRemoval - Video Watermark Removal Plugin
  * @property {ViewDetection} ViewDetection - Classifies wear type and view type of products in the image
  * @property {WatermarkRemoval} WatermarkRemoval - Watermark Removal Plugin
  * @property {WatermarkDetection} WatermarkDetection - Watermark Detection Plugin
@@ -114,6 +118,7 @@ class Pixelbin {
         Artifact,
         AWSRekognitionPlugin,
         BackgroundGenerator,
+        VariationGenerator,
         EraseBG,
         GoogleVisionPlugin,
         ImageCentering,
@@ -130,6 +135,7 @@ class Pixelbin {
         Basic,
         SoftShadowGenerator,
         SuperResolution,
+        VideoWatermarkRemoval,
         ViewDetection,
         WatermarkRemoval,
         WatermarkDetection,

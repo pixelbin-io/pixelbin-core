@@ -1,3 +1,10 @@
+# 6.1.0
+
+-   Added new plugins
+    -   `VideoWatermarkRemoval` - Video Watermark Removal
+    -   `VariationGenerator` - AI Variation Generator
+-   `Upload` function now returns uploaded file metadata if you use v2 signed URLs.
+
 # 6.0.0
 
 -   Added new plugins

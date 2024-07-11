@@ -64,7 +64,7 @@ console.log(demoImage.getUrl());
 Add the [this](./dist) distributable in a script tag
 
 ```html
-<script src="pixelbin.v6.0.0.js"></script>
+<script src="pixelbin.v6.1.0.js"></script>
 ```
 
 ```javascript
@@ -105,8 +105,27 @@ The SDK provides a `upload` utility to upload images directly from the browser w
 
 **returns**: Promise
 
--   Resolves with no response on success.
--   Rejects with error on failure.
+**On Success, Promise will either have no response on success if you use v1 signed URL or with file metadata when using v2 signed URL (Recommended)**
+
+| property             | description                                                     | example                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| orgId (Number)       | Organization id                                                 | `5320086`                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| type (String)        |                                                                 | `file`                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| name (String)        | name of the file                                                | `testfile.jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| path (String)        | Path of containing folder.                                      | `/path/to/image.jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| fileId (String)      | id of file                                                      | `testfile.jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| access (String)      | Access level of asset, can be either `public-read` or `private` | `public-read`                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| tags (Array<String>) | Tags associated with the file.                                  | `["tag1", "tag2"]`                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| metadata (Object)    | Metadata associated with the file.                              | `{"source:"", "publicUploadId":""}`                                                                                                                                                                                                                                                                                                                                                                                                        |
+| format (String)      | file format                                                     | `jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| assetType (String)   | type of asset                                                   | `image`                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| size (Number)        | file size                                                       | `37394`                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| width (Number)       | file width                                                      | `720`                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| height (Number)      | file height                                                     | `450`                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| context (Object)     | contains the file metadata and other contexts of file           | `{"steps":[],"req":{"headers":{},"query":{}},"meta":{"format":"png","size":195337,"width":812,"height":500,"space":"srgb","channels":4,"depth":"uchar","density":144,"isProgressive":false,"resolutionUnit":"inch","hasProfile":true,"hasAlpha":true,"extension":"jpeg","contentType":"image/png","assetType":"image","isImageAsset":true,"isAudioAsset":false,"isVideoAsset":false,"isRawAsset":false,"isTransformationSupported":true}}` |
+| isOriginal (Boolean) | flag about files type                                           | `true`                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| \_id (String)        | record id                                                       | `a0b0b19a-d526-4xc07-ae51-0xxxxxx`                                                                                                                                                                                                                                                                                                                                                                                                         |
+| url (String)         | uploaded image url                                              | `https://cdn.pixelbin.io/v2/user-e26cf3/original/testfile.jpeg`                                                                                                                                                                                                                                                                                                                                                                            |
 
 Example :
 
@@ -131,7 +150,7 @@ const handleFileInputEvent = function (e) {
         maxRetries: 1,
         concurrency: 2,
     })
-        .then(() => console.log("Uploaded Successfully"))
+        .then((res) => console.log("Uploaded Successfully. Response: ", res))
         .catch((err) => console.log("Error while uploading"));
 };
 fileInput.addEventListener("change", handleFileInputEvent);
@@ -505,7 +524,6 @@ const t = moderation({
 | parameter        | type                            | defaults                                                                                                                   |
 | ---------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | backgroundPrompt | custom                          | `YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr` |
-| backgroundImage  | file                            | ``                                                                                                                         |
 | focus            | enum : `Product` , `Background` | `Product`                                                                                                                  |
 | negativePrompt   | custom                          | ``                                                                                                                         |
 | seed             | integer                         | 123                                                                                                                        |
@@ -516,7 +534,6 @@ const t = moderation({
 const t = bg({
     backgroundPrompt:
         "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
-    backgroundImage: "",
     focus: "Product",
     negativePrompt: "",
     seed: 123,
@@ -525,18 +542,45 @@ const t = bg({
 
 </details>
 
-### 5. EraseBG
+### 5. VariationGenerator
+
+<details>
+<summary> 1. generate </summary>
+
+#### Supported Configuration
+
+| parameter               | type    | defaults |
+| ----------------------- | ------- | -------- |
+| generateVariationPrompt | custom  | ``       |
+| noOfVariations          | integer | 1        |
+| seed                    | integer | 0        |
+| autoscale               | boolean | true     |
+
+#### Usage Example
+
+```javascript
+const t = generate({
+    generateVariationPrompt: "",
+    noOfVariations: 1,
+    seed: 0,
+    autoscale: true,
+});
+```
+
+</details>
+
+### 6. EraseBG
 
 <details>
 <summary> 1. bg </summary>
 
 #### Supported Configuration
 
-| parameter    | type                                             | defaults  |
-| ------------ | ------------------------------------------------ | --------- |
-| industryType | enum : `general` , `ecommerce` , `car` , `human` | `general` |
-| addShadow    | boolean                                          | false     |
-| refine       | boolean                                          | true      |
+| parameter    | type                                                        | defaults  |
+| ------------ | ----------------------------------------------------------- | --------- |
+| industryType | enum : `general` , `ecommerce` , `car` , `human` , `object` | `general` |
+| addShadow    | boolean                                                     | false     |
+| refine       | boolean                                                     | true      |
 
 #### Usage Example
 
@@ -550,7 +594,7 @@ const t = bg({
 
 </details>
 
-### 6. GoogleVisionPlugin
+### 7. GoogleVisionPlugin
 
 <details>
 <summary> 1. detectLabels </summary>
@@ -571,7 +615,7 @@ const t = detectLabels({
 
 </details>
 
-### 7. ImageCentering
+### 8. ImageCentering
 
 <details>
 <summary> 1. detect </summary>
@@ -592,7 +636,7 @@ const t = detect({
 
 </details>
 
-### 8. IntelligentCrop
+### 9. IntelligentCrop
 
 <details>
 <summary> 1. crop </summary>
@@ -627,7 +671,7 @@ const t = crop({
 
 </details>
 
-### 9. ObjectCounter
+### 10. ObjectCounter
 
 <details>
 <summary> 1. detect </summary>
@@ -640,7 +684,7 @@ const t = detect({});
 
 </details>
 
-### 10. NSFWDetection
+### 11. NSFWDetection
 
 <details>
 <summary> 1. detect </summary>
@@ -661,7 +705,7 @@ const t = detect({
 
 </details>
 
-### 11. NumberPlateDetection
+### 12. NumberPlateDetection
 
 <details>
 <summary> 1. detect </summary>
@@ -674,7 +718,7 @@ const t = detect({});
 
 </details>
 
-### 12. ObjectDetection
+### 13. ObjectDetection
 
 <details>
 <summary> 1. detect </summary>
@@ -687,7 +731,7 @@ const t = detect({});
 
 </details>
 
-### 13. CheckObjectSize
+### 14. CheckObjectSize
 
 <details>
 <summary> 1. detect </summary>
@@ -708,7 +752,7 @@ const t = detect({
 
 </details>
 
-### 14. TextDetectionandRecognition
+### 15. TextDetectionandRecognition
 
 <details>
 <summary> 1. extract </summary>
@@ -729,7 +773,7 @@ const t = extract({
 
 </details>
 
-### 15. PdfWatermarkRemoval
+### 16. PdfWatermarkRemoval
 
 <details>
 <summary> 1. remove </summary>
@@ -742,7 +786,7 @@ const t = remove({});
 
 </details>
 
-### 16. ProductTagging
+### 17. ProductTagging
 
 <details>
 <summary> 1. tag </summary>
@@ -755,7 +799,7 @@ const t = tag({});
 
 </details>
 
-### 17. CheckProductVisibility
+### 18. CheckProductVisibility
 
 <details>
 <summary> 1. detect </summary>
@@ -768,7 +812,7 @@ const t = detect({});
 
 </details>
 
-### 18. Basic
+### 19. Basic
 
 <details>
 <summary> 1. resize </summary>
@@ -1197,7 +1241,7 @@ const t = merge({
 
 </details>
 
-### 19. SoftShadowGenerator
+### 20. SoftShadowGenerator
 
 <details>
 <summary> 1. gen </summary>
@@ -1224,7 +1268,7 @@ const t = gen({
 
 </details>
 
-### 20. SuperResolution
+### 21. SuperResolution
 
 <details>
 <summary> 1. upscale </summary>
@@ -1233,7 +1277,7 @@ const t = gen({
 
 | parameter      | type                       | defaults  |
 | -------------- | -------------------------- | --------- |
-| type           | enum : `2x` , `4x`         | `2x`      |
+| type           | enum : `2x` , `4x` , `8x`  | `2x`      |
 | enhanceFace    | boolean                    | false     |
 | model          | enum : `Picasso` , `Flash` | `Picasso` |
 | enhanceQuality | boolean                    | false     |
@@ -1251,7 +1295,20 @@ const t = upscale({
 
 </details>
 
-### 21. ViewDetection
+### 22. VideoWatermarkRemoval
+
+<details>
+<summary> 1. remove </summary>
+
+#### Usage Example
+
+```javascript
+const t = remove({});
+```
+
+</details>
+
+### 23. ViewDetection
 
 <details>
 <summary> 1. detect </summary>
@@ -1264,7 +1321,7 @@ const t = detect({});
 
 </details>
 
-### 22. WatermarkRemoval
+### 24. WatermarkRemoval
 
 <details>
 <summary> 1. remove </summary>
@@ -1297,7 +1354,7 @@ const t = remove({
 
 </details>
 
-### 23. WatermarkDetection
+### 25. WatermarkDetection
 
 <details>
 <summary> 1. detect </summary>

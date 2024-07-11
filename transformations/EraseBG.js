@@ -3,7 +3,7 @@ import { processParams } from "../utils/transformation.utils.js";
 
 /**
  * EraseBG Background Removal Module
- * @param {enum} industryType - Industry type* @param {boolean} addShadow - Add Shadow (cars only)* @param {boolean} refine - Refine Output
+ * @param {enum} industryType - Foreground Type* @param {boolean} addShadow - Add Shadow (cars only)* @param {boolean} refine - Refine Output
  * returns Transformation
  */
 export const bg = function (
