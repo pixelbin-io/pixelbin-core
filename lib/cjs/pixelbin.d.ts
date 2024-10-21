@@ -4,6 +4,10 @@ export type transformations = {
      */
     DetectBackgroundType: typeof DetectBackgroundType;
     /**
+     * - Basic Transformations
+     */
+    Basic: typeof Basic;
+    /**
      * - Artifact Removal Plugin
      */
     Artifact: typeof Artifact;
@@ -15,6 +19,10 @@ export type transformations = {
      * - AI Background Generator
      */
     BackgroundGenerator: typeof BackgroundGenerator;
+    /**
+     * - AI Image Extender
+     */
+    ImageExtender: typeof ImageExtender;
     /**
      * - AI Variation Generator
      */
@@ -35,6 +43,10 @@ export type transformations = {
      * - Intelligent Crop Plugin
      */
     IntelligentCrop: typeof IntelligentCrop;
+    /**
+     * - Intelligent Masking
+     */
+    IntelligentMasking: typeof IntelligentMasking;
     /**
      * - Classifies whether objects in the image are single or multiple
      */
@@ -72,9 +84,9 @@ export type transformations = {
      */
     CheckProductVisibility: typeof CheckProductVisibility;
     /**
-     * - Basic Transformations
+     * - QRCode Plugin
      */
-    Basic: typeof Basic;
+    QRCode: typeof QRCode;
     /**
      * - AI Soft Shadow Generator
      */
@@ -84,9 +96,17 @@ export type transformations = {
      */
     SuperResolution: typeof SuperResolution;
     /**
+     * - Vertex AI based transformations
+     */
+    VertexAI: typeof VertexAI;
+    /**
      * - Video Watermark Removal Plugin
      */
     VideoWatermarkRemoval: typeof VideoWatermarkRemoval;
+    /**
+     * - Video Upscaler Plugin
+     */
+    VideoUpscalerPlugin: typeof VideoUpscalerPlugin;
     /**
      * - Classifies wear type and view type of products in the image
      */
@@ -103,14 +123,17 @@ export type transformations = {
 /**
  * @typedef {Object} transformations
  * @property {DetectBackgroundType} DetectBackgroundType - Classifies the background of a product as plain, clean or busy
+ * @property {Basic} Basic - Basic Transformations
  * @property {Artifact} Artifact - Artifact Removal Plugin
  * @property {AWSRekognitionPlugin} AWSRekognitionPlugin - Detect objects and text in images
  * @property {BackgroundGenerator} BackgroundGenerator - AI Background Generator
+ * @property {ImageExtender} ImageExtender - AI Image Extender
  * @property {VariationGenerator} VariationGenerator - AI Variation Generator
  * @property {EraseBG} EraseBG - EraseBG Background Removal Module
  * @property {GoogleVisionPlugin} GoogleVisionPlugin - Detect content and text in images
  * @property {ImageCentering} ImageCentering - Image Centering Module
  * @property {IntelligentCrop} IntelligentCrop - Intelligent Crop Plugin
+ * @property {IntelligentMasking} IntelligentMasking - Intelligent Masking
  * @property {ObjectCounter} ObjectCounter - Classifies whether objects in the image are single or multiple
  * @property {NSFWDetection} NSFWDetection - Detect NSFW content in images
  * @property {NumberPlateDetection} NumberPlateDetection - Number Plate Detection Plugin
@@ -120,10 +143,12 @@ export type transformations = {
  * @property {PdfWatermarkRemoval} PdfWatermarkRemoval - PDF Watermark Removal Plugin
  * @property {ProductTagging} ProductTagging - AI Product Tagging
  * @property {CheckProductVisibility} CheckProductVisibility - Classifies whether the product in the image is completely visible or not
- * @property {Basic} Basic - Basic Transformations
+ * @property {QRCode} QRCode - QRCode Plugin
  * @property {SoftShadowGenerator} SoftShadowGenerator - AI Soft Shadow Generator
  * @property {SuperResolution} SuperResolution - Super Resolution Module
+ * @property {VertexAI} VertexAI - Vertex AI based transformations
  * @property {VideoWatermarkRemoval} VideoWatermarkRemoval - Video Watermark Removal Plugin
+ * @property {VideoUpscalerPlugin} VideoUpscalerPlugin - Video Upscaler Plugin
  * @property {ViewDetection} ViewDetection - Classifies wear type and view type of products in the image
  * @property {WatermarkRemoval} WatermarkRemoval - Watermark Removal Plugin
  * @property {WatermarkDetection} WatermarkDetection - Watermark Detection Plugin
@@ -163,14 +188,17 @@ declare class Pixelbin {
      */
     static transformations: {
         DetectBackgroundType: typeof DetectBackgroundType;
+        Basic: typeof Basic;
         Artifact: typeof Artifact;
         AWSRekognitionPlugin: typeof AWSRekognitionPlugin;
         BackgroundGenerator: typeof BackgroundGenerator;
+        ImageExtender: typeof ImageExtender;
         VariationGenerator: typeof VariationGenerator;
         EraseBG: typeof EraseBG;
         GoogleVisionPlugin: typeof GoogleVisionPlugin;
         ImageCentering: typeof ImageCentering;
         IntelligentCrop: typeof IntelligentCrop;
+        IntelligentMasking: typeof IntelligentMasking;
         ObjectCounter: typeof ObjectCounter;
         NSFWDetection: typeof NSFWDetection;
         NumberPlateDetection: typeof NumberPlateDetection;
@@ -180,10 +208,12 @@ declare class Pixelbin {
         PdfWatermarkRemoval: typeof PdfWatermarkRemoval;
         ProductTagging: typeof ProductTagging;
         CheckProductVisibility: typeof CheckProductVisibility;
-        Basic: typeof Basic;
+        QRCode: typeof QRCode;
         SoftShadowGenerator: typeof SoftShadowGenerator;
         SuperResolution: typeof SuperResolution;
+        VertexAI: typeof VertexAI;
         VideoWatermarkRemoval: typeof VideoWatermarkRemoval;
+        VideoUpscalerPlugin: typeof VideoUpscalerPlugin;
         ViewDetection: typeof ViewDetection;
         WatermarkRemoval: typeof WatermarkRemoval;
         WatermarkDetection: typeof WatermarkDetection;
@@ -211,14 +241,17 @@ declare class Pixelbin {
 }
 import Transformation from "./transformation";
 import * as DetectBackgroundType from "./transformations/DetectBackgroundType";
+import * as Basic from "./transformations/Basic";
 import * as Artifact from "./transformations/Artifact";
 import * as AWSRekognitionPlugin from "./transformations/AWSRekognitionPlugin";
 import * as BackgroundGenerator from "./transformations/BackgroundGenerator";
+import * as ImageExtender from "./transformations/ImageExtender";
 import * as VariationGenerator from "./transformations/VariationGenerator";
 import * as EraseBG from "./transformations/EraseBG";
 import * as GoogleVisionPlugin from "./transformations/GoogleVisionPlugin";
 import * as ImageCentering from "./transformations/ImageCentering";
 import * as IntelligentCrop from "./transformations/IntelligentCrop";
+import * as IntelligentMasking from "./transformations/IntelligentMasking";
 import * as ObjectCounter from "./transformations/ObjectCounter";
 import * as NSFWDetection from "./transformations/NSFWDetection";
 import * as NumberPlateDetection from "./transformations/NumberPlateDetection";
@@ -228,23 +261,28 @@ import * as TextDetectionandRecognition from "./transformations/TextDetectionand
 import * as PdfWatermarkRemoval from "./transformations/PdfWatermarkRemoval";
 import * as ProductTagging from "./transformations/ProductTagging";
 import * as CheckProductVisibility from "./transformations/CheckProductVisibility";
-import * as Basic from "./transformations/Basic";
+import * as QRCode from "./transformations/QRCode";
 import * as SoftShadowGenerator from "./transformations/SoftShadowGenerator";
 import * as SuperResolution from "./transformations/SuperResolution";
+import * as VertexAI from "./transformations/VertexAI";
 import * as VideoWatermarkRemoval from "./transformations/VideoWatermarkRemoval";
+import * as VideoUpscalerPlugin from "./transformations/VideoUpscalerPlugin";
 import * as ViewDetection from "./transformations/ViewDetection";
 import * as WatermarkRemoval from "./transformations/WatermarkRemoval";
 import * as WatermarkDetection from "./transformations/WatermarkDetection";
 export namespace transformations {
     export { DetectBackgroundType };
+    export { Basic };
     export { Artifact };
     export { AWSRekognitionPlugin };
     export { BackgroundGenerator };
+    export { ImageExtender };
     export { VariationGenerator };
     export { EraseBG };
     export { GoogleVisionPlugin };
     export { ImageCentering };
     export { IntelligentCrop };
+    export { IntelligentMasking };
     export { ObjectCounter };
     export { NSFWDetection };
     export { NumberPlateDetection };
@@ -254,10 +292,12 @@ export namespace transformations {
     export { PdfWatermarkRemoval };
     export { ProductTagging };
     export { CheckProductVisibility };
-    export { Basic };
+    export { QRCode };
     export { SoftShadowGenerator };
     export { SuperResolution };
+    export { VertexAI };
     export { VideoWatermarkRemoval };
+    export { VideoUpscalerPlugin };
     export { ViewDetection };
     export { WatermarkRemoval };
     export { WatermarkDetection };

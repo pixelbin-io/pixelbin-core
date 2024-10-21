@@ -473,13 +473,13 @@ export const tint = function (
 
 /**
  * Basic Transformations
- * @param {enum} format - Format* @param {integer} quality - Quality
+ * @param {enum} format - Format* @param {enum} quality - Quality
  * returns Transformation
  */
 export const toFormat = function (
     config = {
         format: "jpeg",
-        quality: 75,
+        quality: "75",
     },
 ) {
     const paramIdMap = {
