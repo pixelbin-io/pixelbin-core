@@ -65,7 +65,7 @@ export function tint(config?: {
 }): Transformation;
 export function toFormat(config?: {
     format: string;
-    quality: number;
+    quality: string;
 }): Transformation;
 export function density(config?: {
     density: number;

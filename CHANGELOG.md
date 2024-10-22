@@ -1,3 +1,13 @@
+# 7.0.0
+
+-   Added new plugins
+    -   `ImageExtender` - AI Image Extender
+    -   `VideoUpscaler` - Upscale Videos using AI
+    -   `IntelligentMasking` - Intelligent Mask sensitive contents from images using AI
+    -   `VertexAI` - Remove Background and Upscale Images using Google Vertex AI
+    -   `QRCode` - QR Code Generator and Scanner
+-   Added new values for `quality` parameter in `toFormat` transformation and changed parameter type to `enum`.
+
 # 6.1.0
 
 -   Added new plugins
