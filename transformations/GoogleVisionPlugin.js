@@ -7,25 +7,30 @@ import { processParams } from "../utils/transformation.utils.js";
  * returns Transformation
  */
 export const detectLabels = function (
-    config = {
-        maximumLabels: 5,
-    },
+  config = {
+    maximumLabels: 5,
+  },
 ) {
-    const paramIdMap = {
-        maximumLabels: "l",
-    };
-    const params = ["maximumLabels"].filter((param) => config.hasOwnProperty(param));
-    const transformation = ["googleVis.detectLabels", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    maximumLabels: "l",
+  };
+  const params = ["maximumLabels"].filter((param) =>
+    config.hasOwnProperty(param),
+  );
+  const transformation = ["googleVis.detectLabels", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 export default {
-    detectLabels,
+  detectLabels,
 };

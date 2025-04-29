@@ -7,33 +7,36 @@ import { processParams } from "../utils/transformation.utils.js";
  * returns Transformation
  */
 export const upscale = function (
-    config = {
-        type: "2x",
-        enhanceFace: false,
-        model: "Picasso",
-        enhanceQuality: false,
-    },
+  config = {
+    type: "2x",
+    enhanceFace: false,
+    model: "Picasso",
+    enhanceQuality: false,
+  },
 ) {
-    const paramIdMap = {
-        type: "t",
-        enhanceFace: "enhance_face",
-        model: "model",
-        enhanceQuality: "enhance_quality",
-    };
-    const params = ["type", "enhanceFace", "model", "enhanceQuality"].filter((param) =>
-        config.hasOwnProperty(param),
-    );
-    const transformation = ["sr.upscale", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    type: "t",
+    enhanceFace: "enhance_face",
+    model: "model",
+    enhanceQuality: "enhance_quality",
+  };
+  const params = ["type", "enhanceFace", "model", "enhanceQuality"].filter(
+    (param) => config.hasOwnProperty(param),
+  );
+  const transformation = ["sr.upscale", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 export default {
-    upscale,
+  upscale,
 };

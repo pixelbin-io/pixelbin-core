@@ -7,32 +7,38 @@ import { processParams } from "../utils/transformation.utils.js";
  * returns Transformation
  */
 export const generateBG = function (
-    config = {
-        backgroundPrompt:
-            "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
-        negativePrompt: "",
-        seed: 22,
-        guidanceScale: 60,
-    },
+  config = {
+    backgroundPrompt:
+      "YSBmb3Jlc3QgZnVsbCBvZiBvYWsgdHJlZXMsd2l0aCBicmlnaHQgbGlnaHRzLCBzdW4gYW5kIGEgbG90IG9mIG1hZ2ljLCB1bHRyYSByZWFsaXN0aWMsIDhr",
+    negativePrompt: "",
+    seed: 22,
+    guidanceScale: 60,
+  },
 ) {
-    const paramIdMap = {
-        backgroundPrompt: "p",
-        negativePrompt: "np",
-        seed: "s",
-        guidanceScale: "gs",
-    };
-    const params = ["backgroundPrompt", "negativePrompt", "seed", "guidanceScale"].filter((param) =>
-        config.hasOwnProperty(param),
-    );
-    const transformation = ["vertexAi.generateBG", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    backgroundPrompt: "p",
+    negativePrompt: "np",
+    seed: "s",
+    guidanceScale: "gs",
+  };
+  const params = [
+    "backgroundPrompt",
+    "negativePrompt",
+    "seed",
+    "guidanceScale",
+  ].filter((param) => config.hasOwnProperty(param));
+  const transformation = ["vertexAi.generateBG", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 /**
@@ -41,17 +47,20 @@ export const generateBG = function (
 * returns Transformation
 */
 export const removeBG = function (config = {}) {
-    const paramIdMap = {};
-    const params = [].filter((param) => config.hasOwnProperty(param));
-    const transformation = ["vertexAi.removeBG", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {};
+  const params = [].filter((param) => config.hasOwnProperty(param));
+  const transformation = ["vertexAi.removeBG", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 /**
@@ -60,27 +69,30 @@ export const removeBG = function (config = {}) {
  * returns Transformation
  */
 export const upscale = function (
-    config = {
-        type: "x2",
-    },
+  config = {
+    type: "x2",
+  },
 ) {
-    const paramIdMap = {
-        type: "t",
-    };
-    const params = ["type"].filter((param) => config.hasOwnProperty(param));
-    const transformation = ["vertexAi.upscale", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    type: "t",
+  };
+  const params = ["type"].filter((param) => config.hasOwnProperty(param));
+  const transformation = ["vertexAi.upscale", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 export default {
-    generateBG,
-    removeBG,
-    upscale,
+  generateBG,
+  removeBG,
+  upscale,
 };

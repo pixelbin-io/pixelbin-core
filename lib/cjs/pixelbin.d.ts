@@ -88,6 +88,10 @@ export type transformations = {
      */
     QRCode: typeof QRCode;
     /**
+     * - Remove background from any image
+     */
+    RemoveBG: typeof RemoveBG;
+    /**
      * - AI Soft Shadow Generator
      */
     SoftShadowGenerator: typeof SoftShadowGenerator;
@@ -144,6 +148,7 @@ export type transformations = {
  * @property {ProductTagging} ProductTagging - AI Product Tagging
  * @property {CheckProductVisibility} CheckProductVisibility - Classifies whether the product in the image is completely visible or not
  * @property {QRCode} QRCode - QRCode Plugin
+ * @property {RemoveBG} RemoveBG - Remove background from any image
  * @property {SoftShadowGenerator} SoftShadowGenerator - AI Soft Shadow Generator
  * @property {SuperResolution} SuperResolution - Super Resolution Module
  * @property {VertexAI} VertexAI - Vertex AI based transformations
@@ -209,6 +214,7 @@ declare class Pixelbin {
         ProductTagging: typeof ProductTagging;
         CheckProductVisibility: typeof CheckProductVisibility;
         QRCode: typeof QRCode;
+        RemoveBG: typeof RemoveBG;
         SoftShadowGenerator: typeof SoftShadowGenerator;
         SuperResolution: typeof SuperResolution;
         VertexAI: typeof VertexAI;
@@ -226,17 +232,17 @@ declare class Pixelbin {
     cloudName: any;
     zone: any;
     /**
-    * @typedef ImageOptions
-    * @type {object}
-    * @param {Boolean} worker - use url translation worker
-    * /
-    
-    /**
-     * provides image on which transformation can be done.
-     * @param {String} imageUri path of image.
-     * @param {ImageOptions} options options for image.
-     * returns Image
-     */
+      * @typedef ImageOptions
+      * @type {object}
+      * @param {Boolean} worker - use url translation worker
+      * /
+      
+      /**
+       * provides image on which transformation can be done.
+       * @param {String} imageUri path of image.
+       * @param {ImageOptions} options options for image.
+       * returns Image
+       */
     image(imageUri: string, options?: {}): Image;
 }
 import Transformation from "./transformation";
@@ -262,6 +268,7 @@ import * as PdfWatermarkRemoval from "./transformations/PdfWatermarkRemoval";
 import * as ProductTagging from "./transformations/ProductTagging";
 import * as CheckProductVisibility from "./transformations/CheckProductVisibility";
 import * as QRCode from "./transformations/QRCode";
+import * as RemoveBG from "./transformations/RemoveBG";
 import * as SoftShadowGenerator from "./transformations/SoftShadowGenerator";
 import * as SuperResolution from "./transformations/SuperResolution";
 import * as VertexAI from "./transformations/VertexAI";
@@ -293,6 +300,7 @@ export namespace transformations {
     export { ProductTagging };
     export { CheckProductVisibility };
     export { QRCode };
+    export { RemoveBG };
     export { SoftShadowGenerator };
     export { SuperResolution };
     export { VertexAI };

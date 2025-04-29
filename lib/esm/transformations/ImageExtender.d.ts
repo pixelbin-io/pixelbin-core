@@ -1,11 +1,8 @@
 export function extend(config?: {
     boundingBox: any;
     prompt: string;
-    negativePrompt: string;
-    strength: number;
     guidanceScale: number;
     numberOfInferenceSteps: number;
-    colorAdjust: boolean;
     seed: number;
 }): Transformation;
 declare namespace _default {

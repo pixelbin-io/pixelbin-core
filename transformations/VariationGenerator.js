@@ -7,33 +7,39 @@ import { processParams } from "../utils/transformation.utils.js";
  * returns Transformation
  */
 export const generate = function (
-    config = {
-        generateVariationPrompt: "",
-        noOfVariations: 1,
-        seed: 0,
-        autoscale: true,
-    },
+  config = {
+    generateVariationPrompt: "",
+    noOfVariations: 1,
+    seed: 0,
+    autoscale: true,
+  },
 ) {
-    const paramIdMap = {
-        generateVariationPrompt: "p",
-        noOfVariations: "v",
-        seed: "s",
-        autoscale: "auto",
-    };
-    const params = ["generateVariationPrompt", "noOfVariations", "seed", "autoscale"].filter(
-        (param) => config.hasOwnProperty(param),
-    );
-    const transformation = ["vg.generate", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    generateVariationPrompt: "p",
+    noOfVariations: "v",
+    seed: "s",
+    autoscale: "auto",
+  };
+  const params = [
+    "generateVariationPrompt",
+    "noOfVariations",
+    "seed",
+    "autoscale",
+  ].filter((param) => config.hasOwnProperty(param));
+  const transformation = ["vg.generate", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 export default {
-    generate,
+  generate,
 };

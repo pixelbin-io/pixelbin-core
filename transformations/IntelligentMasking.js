@@ -7,31 +7,34 @@ import { processParams } from "../utils/transformation.utils.js";
  * returns Transformation
  */
 export const mask = function (
-    config = {
-        replacementImage: "",
-        detector: "number_plate",
-        maskType: "fill_black",
-    },
+  config = {
+    replacementImage: "",
+    detector: "number_plate",
+    maskType: "fill_black",
+  },
 ) {
-    const paramIdMap = {
-        replacementImage: "i",
-        detector: "d",
-        maskType: "m",
-    };
-    const params = ["replacementImage", "detector", "maskType"].filter((param) =>
-        config.hasOwnProperty(param),
-    );
-    const transformation = ["im.mask", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    replacementImage: "i",
+    detector: "d",
+    maskType: "m",
+  };
+  const params = ["replacementImage", "detector", "maskType"].filter((param) =>
+    config.hasOwnProperty(param),
+  );
+  const transformation = ["im.mask", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 export default {
-    mask,
+  mask,
 };

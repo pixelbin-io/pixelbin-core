@@ -7,48 +7,51 @@ import { processParams } from "../utils/transformation.utils.js";
  * returns Transformation
  */
 export const crop = function (
-    config = {
-        requiredWidth: 0,
-        requiredHeight: 0,
-        paddingPercentage: 0,
-        maintainOriginalAspect: false,
-        aspectRatio: "",
-        gravityTowards: "none",
-        preferredDirection: "center",
-        objectType: "person",
-    },
+  config = {
+    requiredWidth: 0,
+    requiredHeight: 0,
+    paddingPercentage: 0,
+    maintainOriginalAspect: false,
+    aspectRatio: "",
+    gravityTowards: "none",
+    preferredDirection: "center",
+    objectType: "person",
+  },
 ) {
-    const paramIdMap = {
-        requiredWidth: "w",
-        requiredHeight: "h",
-        paddingPercentage: "p",
-        maintainOriginalAspect: "ma",
-        aspectRatio: "ar",
-        gravityTowards: "g",
-        preferredDirection: "d",
-        objectType: "obj",
-    };
-    const params = [
-        "requiredWidth",
-        "requiredHeight",
-        "paddingPercentage",
-        "maintainOriginalAspect",
-        "aspectRatio",
-        "gravityTowards",
-        "preferredDirection",
-        "objectType",
-    ].filter((param) => config.hasOwnProperty(param));
-    const transformation = ["ic.crop", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    requiredWidth: "w",
+    requiredHeight: "h",
+    paddingPercentage: "p",
+    maintainOriginalAspect: "ma",
+    aspectRatio: "ar",
+    gravityTowards: "g",
+    preferredDirection: "d",
+    objectType: "obj",
+  };
+  const params = [
+    "requiredWidth",
+    "requiredHeight",
+    "paddingPercentage",
+    "maintainOriginalAspect",
+    "aspectRatio",
+    "gravityTowards",
+    "preferredDirection",
+    "objectType",
+  ].filter((param) => config.hasOwnProperty(param));
+  const transformation = ["ic.crop", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 export default {
-    crop,
+  crop,
 };

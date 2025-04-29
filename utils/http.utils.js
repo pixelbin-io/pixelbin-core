@@ -5,7 +5,7 @@ import fetchPonyfill from "fetch-ponyfill";
 const { fetch } = fetchPonyfill();
 
 function makeRequest(url, opts) {
-    return fetch(url, opts);
+  return fetch(url, opts);
 }
 
 export default { makeRequest };

@@ -1,11 +1,11 @@
 export function remove(config?: {
     removeText: boolean;
     removeLogo: boolean;
-    box1: string;
-    box2: string;
-    box3: string;
-    box4: string;
-    box5: string;
+    box_1: string;
+    box_2: string;
+    box_3: string;
+    box_4: string;
+    box_5: string;
 }): Transformation;
 declare namespace _default {
     export { remove };

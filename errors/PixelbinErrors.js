@@ -1,34 +1,34 @@
 class PDKInvalidUrlError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "PDKInvalidUrlError";
-    }
+  constructor(message) {
+    super(message);
+    this.name = "PDKInvalidUrlError";
+  }
 }
 
 class PDKIllegalArgumentError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "PDKIllegalArgumentError";
-    }
+  constructor(message) {
+    super(message);
+    this.name = "PDKIllegalArgumentError";
+  }
 }
 
 class PDKIllegalQueryParameterError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "PDKIllegalQueryParameterError";
-    }
+  constructor(message) {
+    super(message);
+    this.name = "PDKIllegalQueryParameterError";
+  }
 }
 
 class PDKTransformationError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "PDKTransformationError";
-    }
+  constructor(message) {
+    super(message);
+    this.name = "PDKTransformationError";
+  }
 }
 
 export {
-    PDKInvalidUrlError,
-    PDKIllegalArgumentError,
-    PDKIllegalQueryParameterError,
-    PDKTransformationError,
+  PDKInvalidUrlError,
+  PDKIllegalArgumentError,
+  PDKIllegalQueryParameterError,
+  PDKTransformationError,
 };

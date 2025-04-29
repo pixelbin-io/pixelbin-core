@@ -7,27 +7,30 @@ import { processParams } from "../utils/transformation.utils.js";
  * returns Transformation
  */
 export const detectLabels = function (
-    config = {
-        maximumLabels: 5,
-        minimumConfidence: 55,
-    },
+  config = {
+    maximumLabels: 5,
+    minimumConfidence: 55,
+  },
 ) {
-    const paramIdMap = {
-        maximumLabels: "l",
-        minimumConfidence: "c",
-    };
-    const params = ["maximumLabels", "minimumConfidence"].filter((param) =>
-        config.hasOwnProperty(param),
-    );
-    const transformation = ["awsRek.detectLabels", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    maximumLabels: "l",
+    minimumConfidence: "c",
+  };
+  const params = ["maximumLabels", "minimumConfidence"].filter((param) =>
+    config.hasOwnProperty(param),
+  );
+  const transformation = ["awsRek.detectLabels", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 /**
@@ -36,26 +39,31 @@ export const detectLabels = function (
  * returns Transformation
  */
 export const moderation = function (
-    config = {
-        minimumConfidence: 55,
-    },
+  config = {
+    minimumConfidence: 55,
+  },
 ) {
-    const paramIdMap = {
-        minimumConfidence: "c",
-    };
-    const params = ["minimumConfidence"].filter((param) => config.hasOwnProperty(param));
-    const transformation = ["awsRek.moderation", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    minimumConfidence: "c",
+  };
+  const params = ["minimumConfidence"].filter((param) =>
+    config.hasOwnProperty(param),
+  );
+  const transformation = ["awsRek.moderation", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 export default {
-    detectLabels,
-    moderation,
+  detectLabels,
+  moderation,
 };

@@ -7,31 +7,34 @@ import { processParams } from "../utils/transformation.utils.js";
  * returns Transformation
  */
 export const bg = function (
-    config = {
-        industryType: "general",
-        addShadow: false,
-        refine: true,
-    },
+  config = {
+    industryType: "general",
+    addShadow: false,
+    refine: true,
+  },
 ) {
-    const paramIdMap = {
-        industryType: "i",
-        addShadow: "shadow",
-        refine: "r",
-    };
-    const params = ["industryType", "addShadow", "refine"].filter((param) =>
-        config.hasOwnProperty(param),
-    );
-    const transformation = ["erase.bg", "("];
-    params.map((param, idx) => {
-        processParams(config, params, transformation, paramIdMap, param, idx);
-    });
-    if (transformation.length && transformation[transformation.length - 1] === ",") {
-        transformation.pop();
-    }
-    transformation.push(")");
-    return new Transformation([transformation.join("")]);
+  const paramIdMap = {
+    industryType: "i",
+    addShadow: "shadow",
+    refine: "r",
+  };
+  const params = ["industryType", "addShadow", "refine"].filter((param) =>
+    config.hasOwnProperty(param),
+  );
+  const transformation = ["erase.bg", "("];
+  params.map((param, idx) => {
+    processParams(config, params, transformation, paramIdMap, param, idx);
+  });
+  if (
+    transformation.length &&
+    transformation[transformation.length - 1] === ","
+  ) {
+    transformation.pop();
+  }
+  transformation.push(")");
+  return new Transformation([transformation.join("")]);
 };
 
 export default {
-    bg,
+  bg,
 };

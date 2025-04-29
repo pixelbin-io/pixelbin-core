@@ -1,12 +1,12 @@
 import {
-    getObjFromUrl,
-    getUrlFromObj,
-    getPatternFromTransformations,
+  getObjFromUrl,
+  getUrlFromObj,
+  getPatternFromTransformations,
 } from "./transformation.utils";
 
 const config = {
-    operationSeparator: "~",
-    parameterSeparator: ",",
+  operationSeparator: "~",
+  parameterSeparator: ",",
 };
 
 /**
@@ -30,19 +30,19 @@ Converts a URL to an object representation.
 @returns {urlToObjResult} - The object representation of the URL.
 */
 const urlToObj = function (url, opts = { isCustomDomain: false }) {
-    return getObjFromUrl(
-        url,
-        {
-            operationSeparator: config.operationSeparator,
-            parameterSeparator: config.parameterSeparator,
-            isCustomDomain: opts.isCustomDomain,
-        },
-        false,
-    );
+  return getObjFromUrl(
+    url,
+    {
+      operationSeparator: config.operationSeparator,
+      parameterSeparator: config.parameterSeparator,
+      isCustomDomain: opts.isCustomDomain,
+    },
+    false,
+  );
 };
 
 const generatePixelbinPattern = function (transformationList) {
-    return getPatternFromTransformations(transformationList, config);
+  return getPatternFromTransformations(transformationList, config);
 };
 
 /**
@@ -65,7 +65,7 @@ Converts an object to a URL representation.
 @returns {string} - The URL representation of the object.
 */
 const objToUrl = function (obj) {
-    return getUrlFromObj(obj, config);
+  return getUrlFromObj(obj, config);
 };
 
 export { urlToObj, objToUrl };

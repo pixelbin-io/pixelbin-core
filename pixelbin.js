@@ -26,6 +26,7 @@ import * as PdfWatermarkRemoval from "./transformations/PdfWatermarkRemoval";
 import * as ProductTagging from "./transformations/ProductTagging";
 import * as CheckProductVisibility from "./transformations/CheckProductVisibility";
 import * as QRCode from "./transformations/QRCode";
+import * as RemoveBG from "./transformations/RemoveBG";
 import * as SoftShadowGenerator from "./transformations/SoftShadowGenerator";
 import * as SuperResolution from "./transformations/SuperResolution";
 import * as VertexAI from "./transformations/VertexAI";
@@ -59,6 +60,7 @@ import * as WatermarkDetection from "./transformations/WatermarkDetection";
  * @property {ProductTagging} ProductTagging - AI Product Tagging
  * @property {CheckProductVisibility} CheckProductVisibility - Classifies whether the product in the image is completely visible or not
  * @property {QRCode} QRCode - QRCode Plugin
+ * @property {RemoveBG} RemoveBG - Remove background from any image
  * @property {SoftShadowGenerator} SoftShadowGenerator - AI Soft Shadow Generator
  * @property {SuperResolution} SuperResolution - Super Resolution Module
  * @property {VertexAI} VertexAI - Vertex AI based transformations
@@ -73,15 +75,15 @@ import * as WatermarkDetection from "./transformations/WatermarkDetection";
  * class to create a Pixelbin object
  */
 class Pixelbin {
-    /**
-     * @param {Object} cloud-details takes detail for cloud name and zone
-     */
-    constructor({ cloudName, zone }) {
-        this.cloudName = cloudName;
-        this.zone = zone === "default" ? "" : zone || "";
-    }
+  /**
+   * @param {Object} cloud-details takes detail for cloud name and zone
+   */
+  constructor({ cloudName, zone }) {
+    this.cloudName = cloudName;
+    this.zone = zone === "default" ? "" : zone || "";
+  }
 
-    /**
+  /**
     * @typedef ImageOptions
     * @type {object}
     * @param {Boolean} worker - use url translation worker
@@ -93,70 +95,71 @@ class Pixelbin {
      * @param {ImageOptions} options options for image.
      * returns Image
      */
-    image(imageUri, options = {}) {
-        return new Image(imageUri, this.cloudName, this.zone, options.worker);
-    }
+  image(imageUri, options = {}) {
+    return new Image(imageUri, this.cloudName, this.zone, options.worker);
+  }
 
-    /**
-     * provides access to url utilities
-     * returns Object
-     */
-    static get utils() {
-        return { objToUrl, urlToObj };
-    }
+  /**
+   * provides access to url utilities
+   * returns Object
+   */
+  static get utils() {
+    return { objToUrl, urlToObj };
+  }
 
-    /**
-     *
-     * @param {File} file
-     * @param {Object} signedDetails generated with @pixelbin/core sdk
-     * @param {Object} options
-     * @param {Number} options.chunkSize default 1MB
-     * @param {Number} options.maxRetries default 2
-     * @param {Number} options.concurrency default 3
-     * @returns Promise
-     */
-    static async upload(file, signedDetails, options) {
-        return upload(file, signedDetails, options);
-    }
+  /**
+   *
+   * @param {File} file
+   * @param {Object} signedDetails generated with @pixelbin/core sdk
+   * @param {Object} options
+   * @param {Number} options.chunkSize default 1MB
+   * @param {Number} options.maxRetries default 2
+   * @param {Number} options.concurrency default 3
+   * @returns Promise
+   */
+  static async upload(file, signedDetails, options) {
+    return upload(file, signedDetails, options);
+  }
 
-    /**
-     * provides access to pixelbin transformations
-     * @returns {transformations}
-     */
-    static transformations = {
-        DetectBackgroundType,
-        Basic,
-        Artifact,
-        AWSRekognitionPlugin,
-        BackgroundGenerator,
-        ImageExtender,
-        VariationGenerator,
-        EraseBG,
-        GoogleVisionPlugin,
-        ImageCentering,
-        IntelligentCrop,
-        IntelligentMasking,
-        ObjectCounter,
-        NSFWDetection,
-        NumberPlateDetection,
-        ObjectDetection,
-        CheckObjectSize,
-        TextDetectionandRecognition,
-        PdfWatermarkRemoval,
-        ProductTagging,
-        CheckProductVisibility,
-        QRCode,
-        SoftShadowGenerator,
-        SuperResolution,
-        VertexAI,
-        VideoWatermarkRemoval,
-        VideoUpscalerPlugin,
-        ViewDetection,
-        WatermarkRemoval,
-        WatermarkDetection,
-    };
+  /**
+   * provides access to pixelbin transformations
+   * @returns {transformations}
+   */
+  static transformations = {
+    DetectBackgroundType,
+    Basic,
+    Artifact,
+    AWSRekognitionPlugin,
+    BackgroundGenerator,
+    ImageExtender,
+    VariationGenerator,
+    EraseBG,
+    GoogleVisionPlugin,
+    ImageCentering,
+    IntelligentCrop,
+    IntelligentMasking,
+    ObjectCounter,
+    NSFWDetection,
+    NumberPlateDetection,
+    ObjectDetection,
+    CheckObjectSize,
+    TextDetectionandRecognition,
+    PdfWatermarkRemoval,
+    ProductTagging,
+    CheckProductVisibility,
+    QRCode,
+    RemoveBG,
+    SoftShadowGenerator,
+    SuperResolution,
+    VertexAI,
+    VideoWatermarkRemoval,
+    VideoUpscalerPlugin,
+    ViewDetection,
+    WatermarkRemoval,
+    WatermarkDetection,
+  };
 
-    static Transformation = Transformation;
+  static Transformation = Transformation;
 }
 
 const transformations = Pixelbin.transformations;
